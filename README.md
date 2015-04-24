@@ -32,16 +32,16 @@ export PATH="$PATH:$HOME/docker/bin"
 
 ### Services
 
-- padlock
-- dnsmasq
-- mariadb
-- homemaker
-- plex
-- plexconnect
-- btsync
-- sabnzbd
-- couchpotato
-- samba
-- webdav
-- nginx
+- [padlock](https://github.com/suderman/padlock)
+- [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
+- [mariadb](https://mariadb.org/)
+- [homemaker](https://github.com/suderman/homemaker)
+- [plex](https://plex.tv/)
+- [plexconnect](https://github.com/iBaa/PlexConnect)
+- [btsync](https://www.getsync.com/)
+- [sabnzbd](http://sabnzbd.org/)
+- [couchpotato](https://couchpota.to/)
+- [samba](https://www.samba.org/)
+- [webdav](http://httpd.apache.org/docs/2.2/mod/mod_dav.html)
+- [nginx](http://nginx.org/)
 
