@@ -1,0 +1,88 @@
+#!/bin/bash
+
+# 2015 Jon Suderman
+# https://github.com/suderman/local
+
+# Helper methods for prettier shell scripting - http://suderman.github.io/shelper
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# List of containers (order is significant!)
+containers="ca dnsmasq mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba webdav nginx"
+
+# Where docker directories are found
+docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)
+
+# Build list and reverse-list of services
+for container in $containers; do
+  if has $docker/$container; then
+    services="$services $container"
+    rservices="$container $rservices"
+  fi
+done
+
+if [ $# -eq 0 ]; then
+  msg "Usage: ds start stop restart clean clear refresh rebuild ls stats"
+  exit 1
+fi
+
+case $1 in
+
+  "start" )
+    for service in $services; do
+      cd $docker/$service && d start
+    done
+    ;;
+
+  "stop" )
+    for service in $rservices; do
+      cd $docker/$service && d stop
+    done
+    ;;
+
+  "restart" )
+    for service in $services; do
+      cd $docker/$service && d restart
+    done
+    ;;
+
+  "clean" )
+    for service in $rservices; do
+      cd $docker/$service && d clean
+    done
+    ;;
+
+  "clear" )
+    for service in $rservices; do
+      cd $docker/$service && d clear
+    done
+    ;;
+
+  "refresh" )
+    for service in $rservices; do
+      cd $docker/$service && d clean
+    done
+    for service in $services; do
+      cd $docker/$service && d start
+    done
+    ;;
+
+  "rebuild" )
+    for service in $rservices; do
+      cd $docker/$service && d clear
+    done
+    for service in $services; do
+      cd $docker/$service && d start
+    done
+    ;;
+
+  "ls" )
+    echo $services
+    ;;
+
+  "stats" )
+    for service in $services; do
+      cd $docker/$service && d stats
+      echo "------------------------------------"
+    done
+    ;;
+esac

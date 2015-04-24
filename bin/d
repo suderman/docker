@@ -1,0 +1,221 @@
+#!/bin/bash
+
+# 2015 Jon Suderman
+# https://github.com/suderman/local
+
+# Helper methods for prettier shell scripting - http://suderman.github.io/shelper
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+if [ $# -eq 0 ]; then
+  msg "Usage: d start stop restart exec logs ip clean clear refresh rebuild push pull stats"
+  exit 1
+fi
+
+if [ ! -r "./Makefile" ]; then
+  msg "Error: Makefile not found"
+  exit 1
+fi
+
+if [ ! -r "./Dockerfile" ]; then
+  msg "Warning: Dockerfile not found"
+fi
+
+# Todo: a less fragile way to pull the image name from the Makefile
+image=$(sed -n -e 's/--tag//p' Makefile | sed 's/docker build//g' | sed 's/\.//g' | tr -d " \t\n\r")
+if [ -z "$image" ]; then
+  msg "Error: Can't determine image"
+  exit 1
+fi
+
+# Todo: a less fragile way to pull the container name from the Makefile
+container=$(sed -n -e 's/--name//p' Makefile | sed 's/\\//g' | tr -d " \t\n\r")
+if [ -z "$container" ]; then
+  msg "Error: Cannot determine container"
+  exit 1
+fi
+
+cid=$(docker ps | grep $container: | cut -d' ' -f1)
+
+# Check if an image is missing and needs to be built
+missing_image() {
+  if [ -z "$(docker images --quiet $1)" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Check if a container is missing and needs to be run
+missing_container() {
+  if [ -z "$(docker inspect --format="1" $1 2>/dev/null)" ]; then
+    return 0
+  else
+    return 1
+  fi
+}
+
+# Check if a container is running
+running_container() {
+  if [ -z "$1" ]; then
+    return 1
+  else
+    return 0
+  fi
+}
+
+# Delete a container if it exists
+delete_container() {
+  if missing_container $container; then
+    msg "[$container] Container already cleaned"
+  else
+    if running_container $cid; then
+      msg "[$container] Stopping container..."
+      docker stop $container
+    fi
+    msg "[$container] Cleaning container..."
+    docker rm -f $container
+  fi
+}
+
+# Delete an image if it exists
+delete_image() {
+  if missing_image $image; then
+    msg "[$image] Image already cleared"
+  else
+    msg "[$image] Clearing image..."
+    docker rmi -f $image
+  fi
+}
+
+# Create an image and container
+make_container() {
+
+  msg "[$container] Making config..."
+  make config
+
+  if missing_container $container; then
+
+    if missing_image $image; then
+      msg "[$image] Making image..."
+      make image
+    fi
+
+    msg "[$container] Making container..."
+    make container
+
+  else
+    msg "[$container] Starting container..."
+    docker start $container
+  fi
+}
+
+case $1 in
+
+  "start" )
+    if running_container $cid; then
+      msg "[$container] Container already running"
+    else
+      make_container
+    fi
+    ;;
+
+  "stop" )
+    if running_container $cid; then
+      msg "[$container] Stopping container..."
+      docker stop $container
+    else
+      msg "[$container] Container already stopped"
+    fi
+    ;;
+
+  # Execute restart.sh script
+  "restart" )
+    if running_container $cid; then
+      msg "[$container] Restarting container..."
+      docker exec $container /restart.sh
+    else
+      msg "[$container] Container stopped"
+    fi
+    ;;
+
+  # Execute command in the container, or start shell
+  "exec" )
+    if running_container $cid; then
+      if [ -z "$2" ]; then
+        docker exec -it $container bash
+      else
+        docker exec $container ${@:2}
+      fi
+    else
+      msg "[$container] Container stopped"
+    fi
+    ;;
+
+  # Tail the logs from the container
+  "logs" )
+    msg "Tailing logs..."
+	  docker logs --follow $container
+    ;;
+
+  # Get the IP from the container
+  "ip" )
+    if running_container $cid; then
+      docker inspect --format '{{ .NetworkSettings.IPAddress }}' $container
+    else
+      msg "[$container] Container stopped"
+    fi
+    ;;
+
+  # Stop the container and delete it
+  "clean" )
+    delete_container
+    ;;
+
+  # Delete the image
+  "clear" )
+    delete_container
+    delete_image
+    ;;
+
+  # Refresh the container
+  "refresh" )
+    delete_container
+    make_container
+    ;;
+
+  # Rebuild the image & container
+  "rebuild" )
+    delete_container
+    delete_image
+    make_container
+    ;;
+
+  # Push the image to index.docker.io
+  "push" )
+	  docker push $image
+    ;;
+
+  # Pull the image from index.docker.io
+  "pull" )
+	  docker pull $image
+    ;;
+    
+  # Echo the image and container vars
+  "stats" )
+    if missing_image $image; then
+      echo "Image: $image (missing)"
+    else
+      echo "Image: $image"
+    fi
+    if missing_container $container; then
+      echo "Container: $container (missing)"
+    else
+      echo "Container: $container"
+    fi
+    if running_container $cid; then
+      echo "CID: $cid"
+    else
+      echo "CID: (stopped)"
+    fi
+    ;;
+esac
