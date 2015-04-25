@@ -30,6 +30,40 @@ git clone git@github.com:suderman/docker.git $HOME/docker
 export PATH="$PATH:$HOME/docker/bin"
 ```
 
+### Expected Environment Variables
+
+```
+# Server's domain name (all services are subdomains off this)  
+export DOMAIN="domain.com"  
+
+# Server IP Address  
+export SERVER="10.0.0.2"  
+
+# Server's router IP Address
+export GATEWAY="10.0.0.1"
+
+# Server's ports to listen on
+export HTTP_LAN=80
+export HTTP_WAN=8000
+export HTTPS_LAN=443
+export HTTPS_WAN=4430
+
+# Certificate Authority URL on Server
+export CA="http://10.0.0.2:11443"
+
+# Data directory on Server
+export DATA="/data"
+
+# Authentication for MariaDB (username:password)
+export MARIADB="myname:my-secr3t-passw0rd"
+
+# Authentication for Apache WebDAV (datauser:password)
+export WEBDAV="data:my-secr3t-passw0rd"
+
+# DNSimple API key (email:password)
+export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
+```
+
 ### Services
 
 - [padlock](https://github.com/suderman/padlock)
