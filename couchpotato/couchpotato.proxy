@@ -1,0 +1,3 @@
+couchpotato.  443,4430  5050   ssl,staple
+couchpotato.  80        5050
+couchpotato.  8000      https  redirect

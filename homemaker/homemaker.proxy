@@ -1,0 +1,15 @@
+       api.  443,4430  7000   ssl,staple,auth
+       api.  80        7000
+       api.  8000      https  redirect
+
+    db.api.  443,4430  7001   ssl,staple,auth
+    db.api.  80        7001
+    db.api.  8000      https  redirect
+
+   api.dev.  443,4430  5005   ssl,staple,auth
+   api.dev.  80        5005
+   api.dev.  8000      https  redirect
+
+db.api.dev.  443,4430  5006   ssl,staple,auth
+db.api.dev.  80        5006
+db.api.dev.  8000      https  redirect

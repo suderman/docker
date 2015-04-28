@@ -1,0 +1,3 @@
+isy.  443,4430  10.0.0.3:80 ssl,auth
+isy.  80        10.0.0.3:80
+isy.  8000      https redirect
