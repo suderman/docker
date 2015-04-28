@@ -1,0 +1,11 @@
+NAME='Suderman Certificate Authority'
+ORG='Suderman CA'
+EMAIL='ca@$DOMAIN'
+CITY='Calgary'
+REGION='Alberta'
+COUNTRY='CA'
+SECURE_PORT=1443
+PUBLIC_PORT=1180
+OCSP_PORT=1188
+DOMAIN='ca.$DOMAIN'
+OCSP_DOMAIN='ocsp.ca.$DOMAIN'
