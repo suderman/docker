@@ -1,19 +1,22 @@
 # 2015 Jon Suderman
-# https://github.com/suderman/local
+# https://github.com/suderman/docker
+IMAGE=suderman/btsync
+CONTAINER=btsync
+
 all:
 	@echo "image container"
 
 # Build the image from the Dockerfile
-image:
-	docker build --tag suderman/btsync2 .
+image: 
+	@echo "docker build --tag $(IMAGE) ."
 
 # Create a new detached container from the image
-container: 
-	docker run                          \
+container:
+	echo docker run                     \
 	--detach                            \
-	--name btsync2                      \
-	--publish 8889:8888								  \
-	--publish 55556:55555							  \
+	--name $(CONTAINER)                 \
+	--publish 8888:8888                 \
+	--publish 55555:55555               \
 	--volume $(shell pwd)/var:/app/var  \
-	--volume ${DATA}:/data              \
-	suderman/btsync2
+	--volume $(DATA):/data              \
+	$(IMAGE)

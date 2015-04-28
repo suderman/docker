@@ -1,0 +1,3 @@
+btsync. 443,4430 8888  ssl,staple
+btsync. 80       8888
+btsync. 8000     https redirect
