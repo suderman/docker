@@ -7,7 +7,7 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # List of containers (order is significant!)
-containers="ca dnsmasq mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba webdav nginx"
+containers="padlock mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba webdav proxy"
 
 # Where docker directories are found
 docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)

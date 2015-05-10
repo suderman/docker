@@ -20,15 +20,14 @@ if [ ! -r "./Dockerfile" ]; then
   msg "Warning: Dockerfile not found"
 fi
 
-# Todo: a less fragile way to pull the image name from the Makefile
-image=$(sed -n -e 's/--tag//p' Makefile | sed 's/docker build//g' | sed 's/\.//g' | tr -d " \t\n\r")
+image=$(sed -n -e 's/IMAGE=//p' Makefile | tr -d " \t\n\r")
 if [ -z "$image" ]; then
   msg "Error: Can't determine image"
   exit 1
 fi
 
 # Todo: a less fragile way to pull the container name from the Makefile
-container=$(sed -n -e 's/--name//p' Makefile | sed 's/\\//g' | tr -d " \t\n\r")
+container=$(sed -n -e 's/CONTAINER=//p' Makefile | tr -d " \t\n\r")
 if [ -z "$container" ]; then
   msg "Error: Cannot determine container"
   exit 1
