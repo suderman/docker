@@ -1,3 +1,3 @@
-downloads.  443,4430  /data/downloads ssl,auth
+downloads.  443,4430  /data/downloads    --auth
 downloads.  80        /data/downloads
-downloads.  8000      https redirect
+downloads.  8000      https://downloads. --redirect
