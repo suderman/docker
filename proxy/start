@@ -7,39 +7,34 @@ SERVER=$(ref SERVER 127.0.0.1)
 GATEWAY=$(ref GATEWAY 192.168.1.1)
 CA=$(ref CA 127.0.0.1)
 
-
-for f in $(find /app/var -maxdepth 1 -name "nginx.*.conf"); do
-  echo "$f"
+# Find all proxy files and run proxify
+for f in $(find /app/var -maxdepth 2 -name "*.proxy"); do
+  cd /app && proxify $f
 done
 
-# Copy config files to where they're expected
-copy /app/nginx.conf /etc/nginx/sites-enabled/nginx.conf
-cat /app/var/nginx.*.conf >> /etc/nginx/sites-enabled/nginx.conf
-deref /etc/nginx/sites-enabled/nginx.conf
+# nginx configuration
+cat /app/nginx.*.conf >> /app/nginx.sites.conf
+cat /app/var/nginx/nginx.*.conf >> /app/nginx.sites.conf
+deref /app/nginx.sites.conf
 
-# # Get the server key & pem, and the ca crt & crl
-# copy "$CA_SERVER/*.$DOMAIN.key" ~/my.key
-# copy "$CA_SERVER/*.$DOMAIN.pem" ~/my.pem
-# copy "$CA_SERVER/ca.crt" ~/ca.crt
-# copy "$CA_SERVER/ca.crl.pem" ~/ca.crl
-# chmod 600 ~/my.key ~/my.pem
+# dnsmasq configuration
+cat /app/dnsmasq.*.conf >> /app/dnsmasq.sites.conf
+cat /app/var/dnsmasq/dnsmasq.*.conf >> /app/dnsmasq.sites.conf
+deref /app/dnsmasq.sites.conf
 
-# Get the revoked server key & crt
-(has /app/var/revoked.key) || copy "$CA/revoked.$DOMAIN.key" /app/var/revoked.key
-(has /app/var/revoked.pem) || copy "$CA/revoked.$DOMAIN.pem" /app/var/revoked.pem
-chmod 600 /app/var/revoked.key /app/var/revoked.pem
-
-# ---------------
-
-# # Get the server key & pem, and the ca crt & crl
-# copy "http://10.0.0.2:1443/*.padlock.$DOMAIN.key" ~/padlock.my.key
-# copy "http://10.0.0.2:1443/*.padlock.$DOMAIN.pem" ~/padlock.my.pem
-# copy "http://10.0.0.2:1443/ca.crt" ~/padlock.ca.crt
-# copy "http://10.0.0.2:1443/ca.crl.pem" ~/padlock.ca.crl
-# chmod 600 ~/padlock.my.key ~/padlock.my.pem
+# Run dnsimple scripts
+cat /app/dnsimple.*.sh >> /app/dnsimple.sh
+deref /app/dnsimple.sh
+chmod a+x /app/dnsimple.sh
+/app/dnsimple.sh
 
 # Start the service
-/usr/sbin/nginx
+deref /app/nginx.conf
+nginx -p /app -c /app/nginx.conf
 
-# Tail the logs and keep the container alive
-tail -F /var/log/nginx/*
+# Start up dnsmasq
+deref /app/dnsmasq.conf
+dnsmasq --conf-file=/app/dnsmasq.conf
+
+# Watch the log and keep the container alive
+tail -F /var/log/nginx/* -F /var/log/dnsmasq.log

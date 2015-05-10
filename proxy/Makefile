@@ -1,7 +1,7 @@
 # 2015 Jon Suderman
 # https://github.com/suderman/docker
-IMAGE=suderman/nginx
-CONTAINER=nginx
+IMAGE=suderman/proxy
+CONTAINER=proxy
 
 all:
 	@echo "image container setup nginx dnsmasq proxy"
@@ -14,11 +14,14 @@ image:
 container: setup
 	docker run                             \
 	--detach                               \
+	--net host 										         \
 	--name $(CONTAINER)                    \
 	--publish 80:80                        \
 	--publish 8000:8000                    \
 	--publish 443:443                      \
 	--publish 4430:4430                    \
+	--publish 53:53 	                     \
+	--publish 53:53/udp                    \
 	--env DOMAIN="$(DOMAIN)"               \
 	--env SERVER="$(SERVER)"               \
 	--env GATEWAY="$(GATEWAY)"             \

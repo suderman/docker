@@ -1,0 +1,42 @@
+# Devices on Network
+#-------------------
+
+# Airport Express
+10.0.0.1        airport
+
+# Intel NUC
+10.0.0.2        nuc api
+
+# ISY-994i
+10.0.0.3        isy
+
+# iTach
+10.0.0.4        itach
+
+# MacBook Air
+10.0.0.6        macbook
+
+# Raspberry Pi
+10.0.0.7        pi
+
+# Mac Pro
+10.0.0.8        macpro
+
+# Toshiba Laptop
+10.0.0.9        toshi nessie
+
+# iPhone 5
+10.0.0.10       iphone5
+
+# iPhone 4
+10.0.0.11       iphone4
+
+# iPad
+10.0.0.12       ipad
+
+# PlayStation 3
+10.0.0.13       ps3
+
+# Nintendo 3DS
+10.0.0.14       3ds
+
