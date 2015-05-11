@@ -37,4 +37,5 @@ deref /app/dnsmasq.conf
 dnsmasq --conf-file=/app/dnsmasq.conf
 
 # Watch the log and keep the container alive
+mkdir -p /var/log/nginx && touch /var/log/dnsmasq.log
 tail -F /var/log/nginx/* -F /var/log/dnsmasq.log

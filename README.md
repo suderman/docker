@@ -49,6 +49,7 @@ export CA="http://10.0.0.2:11443"
 export LOGIN="myname:my-secr3t-passw0rd"
 
 # DNSimple API key (email:password)
+# router.domain.com should point to the router's public IP address
 export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"  
 
 # Data directory on Server
