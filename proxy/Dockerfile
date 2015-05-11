@@ -30,12 +30,12 @@ ADD ./dnsmasq.hosts /app/dnsmasq.hosts
 ADD ./dnsmasq.ethers /app/dnsmasq.ethers
 RUN ln -f /app/dnsmasq.ethers /etc/ethers
 
-# Install nginx
+# Install nginx & htpasswd
 RUN                                              \
   add-apt-repository -y ppa:nginx/stable      && \
   apt-get update  --fix-missing               && \
-  apt-get install -y nginx                    && \
-  chown -R www-data:www-data /var/lib/nginx
+  apt-get install -y nginx apache2-utils      && \
+  chown -R data:data /var/lib/nginx
 
 # Add nginx config 
 ADD ./nginx.conf /app/nginx.conf

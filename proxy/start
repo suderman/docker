@@ -6,6 +6,16 @@ DOMAIN=$(ref DOMAIN localhost)
 SERVER=$(ref SERVER 127.0.0.1)
 GATEWAY=$(ref GATEWAY 192.168.1.1)
 CA=$(ref CA 127.0.0.1)
+LOGIN=$(ref LOGIN data:data)
+LOGIN_NAME=$(ref ${LOGIN%:*})
+LOGIN_PASS=$(ref ${LOGIN##*:})
+DNSIMPLE=$(DNSIMPLE '')
+
+# Create .htpasswd file for authentication
+rm -rf /app/.htpasswd
+htpasswd -cb /app/.htpasswd $LOGIN_NAME $LOGIN_PASS
+chown data:data /app/.htpasswd
+chmod 640 /app/.htpasswd
 
 # Find all proxy files and run proxify
 for f in $(find /app/var -maxdepth 2 -name "*.proxy"); do
