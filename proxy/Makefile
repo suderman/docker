@@ -26,6 +26,8 @@ container: setup
 	--env SERVER="$(SERVER)"               \
 	--env GATEWAY="$(GATEWAY)"             \
 	--env CA="$(CA)"                       \
+	--env LOGIN="$(LOGIN)"                 \
+	--env DNSIMPLE="$(DNSIMPLE)"           \
 	--volume $(shell pwd)/var:/app/var     \
 	--volume $(DATA):/data                 \
 	$(IMAGE)

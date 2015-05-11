@@ -2,21 +2,33 @@ FROM suderman/trusty
 
 MAINTAINER Jon Suderman <suderman@gmail.com>
 
-# Install dnsmasq, python, nodejs
+# Define mountable directories.
+VOLUME ["/app/var", "/data"]
+
+# Install python, nodejs
 RUN                                              \
   add-apt-repository -y ppa:chris-lea/node.js && \
   apt-get update --fix-missing                && \
   apt-get install -y                             \
-          dnsmasq                                \
           python2.7                              \
           python-openssl                         \
           nodejs
 RUN npm install -g node-gyp
 
 # Install proxify
-RUN cd /app && git clone https://github.com/suderman/proxify.git 
-RUN cd /app/proxify && npm install
-RUN ln -s /app/proxify/bin/proxify /bin/proxify
+RUN git clone https://github.com/suderman/proxify.git /app/proxify && \
+    cd /app/proxify                                                && \
+    npm install                                                    && \
+    ln -s /app/proxify/bin/proxify /bin/proxify
+
+# Install dnsmasq
+RUN apt-get install -y dnsmasq
+
+# Add dnsmasq configuration file
+ADD ./dnsmasq.conf /app/dnsmasq.conf
+ADD ./dnsmasq.hosts /app/dnsmasq.hosts
+ADD ./dnsmasq.ethers /app/dnsmasq.ethers
+RUN ln -f /app/dnsmasq.ethers /etc/ethers
 
 # Install nginx
 RUN                                              \
@@ -24,15 +36,6 @@ RUN                                              \
   apt-get update  --fix-missing               && \
   apt-get install -y nginx                    && \
   chown -R www-data:www-data /var/lib/nginx
-
-# Define mountable directories.
-VOLUME ["/app/var", "/data"]
-
-# Add dnsmasq configuration file
-ADD ./dnsmasq.conf /app/dnsmasq.conf
-ADD ./dnsmasq.hosts /app/dnsmasq.hosts
-ADD ./dnsmasq.ethers /app/dnsmasq.ethers
-RUN ln -f /app/dnsmasq.ethers /etc/ethers
 
 # Add nginx config 
 ADD ./nginx.conf /app/nginx.conf

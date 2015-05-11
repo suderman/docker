@@ -42,32 +42,22 @@ export SERVER="10.0.0.2"
 # Server's router IP Address
 export GATEWAY="10.0.0.1"
 
-# Server's ports to listen on
-export HTTP_LAN=80
-export HTTP_WAN=8000
-export HTTPS_LAN=443
-export HTTPS_WAN=4430
-
 # Certificate Authority URL on Server
 export CA="http://10.0.0.2:11443"
 
-# Data directory on Server
-export DATA="/data"
-
-# Authentication for MariaDB (username:password)
-export MARIADB="myname:my-secr3t-passw0rd"
-
-# Authentication for Apache WebDAV (datauser:password)
-export WEBDAV="data:my-secr3t-passw0rd"
+# Authentication for services (username:password)
+export LOGIN="myname:my-secr3t-passw0rd"
 
 # DNSimple API key (email:password)
-export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
+export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"  
+
+# Data directory on Server
+export DATA="/data"
 ```
 
 ### Services
 
 - [padlock](https://github.com/suderman/padlock)
-- [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 - [mariadb](https://mariadb.org/)
 - [homemaker](https://github.com/suderman/homemaker)
 - [plex](https://plex.tv/)
@@ -77,5 +67,7 @@ export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
 - [couchpotato](https://couchpota.to/)
 - [samba](https://www.samba.org/)
 - [webdav](http://httpd.apache.org/docs/2.2/mod/mod_dav.html)
-- [nginx](http://nginx.org/)
+- [proxify](https://github.com/suderman/proxify)
+  - [nginx](http://nginx.org/)
+  - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 
