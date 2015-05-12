@@ -37,14 +37,14 @@ setup: nginx dnsmasq proxy
 # Copy all nginx config files to this directory's var
 nginx:
 	rm -rf ./var/nginx && mkdir -p ./var/nginx;                      \
-	for config in $$(find .. -maxdepth 2 -name "nginx.*.conf"); do   \
+	for config in $$(find .. -maxdepth 2 -name "*.nginx.conf"); do   \
 		cp -f $$config ./var/nginx;                                    \
 	done;
 
 # Copy all dnsmasq config files to this directory's var
 dnsmasq:
 	rm -rf ./var/dnsmasq && mkdir -p ./var/dnsmasq;                  \
-	for config in $$(find .. -maxdepth 2 -name "dnsmasq.*.conf"); do \
+	for config in $$(find .. -maxdepth 2 -name "*.dnsmasq.conf"); do \
 		cp -f $$config ./var/dnsmasq;                                  \
 	done;
 

@@ -24,27 +24,22 @@ RUN git clone https://github.com/suderman/proxify.git /app/proxify && \
 # Install dnsmasq
 RUN apt-get install -y dnsmasq
 
-# Add dnsmasq configuration file
-ADD ./dnsmasq.conf /app/dnsmasq.conf
-ADD ./dnsmasq.hosts /app/dnsmasq.hosts
-ADD ./dnsmasq.ethers /app/dnsmasq.ethers
-RUN ln -f /app/dnsmasq.ethers /etc/ethers
+# Add dnsmasq configuration files
+ADD ./hosts /app/hosts
+ADD ./ethers /app/ethers
+RUN ln -f /app/ethers /etc/ethers
 
-# Install nginx & htpasswd
+# Install nginx
 RUN                                              \
   add-apt-repository -y ppa:nginx/stable      && \
   apt-get update  --fix-missing               && \
-  apt-get install -y nginx apache2-utils      && \
+  apt-get install -y nginx                    && \
   chown -R data:data /var/lib/nginx
-
-# Add nginx config 
-ADD ./nginx.conf /app/nginx.conf
 
 # Error pages
 RUN                                                                       \
   git clone https://github.com/janoszen/errorpages.git /tmp/errorpages && \
   cp -r /tmp/errorpages/http-errors /app/error
-ADD ./error.proxy /app/error.proxy
 
 # Add files 
 ADD ./start /app/start

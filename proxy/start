@@ -2,50 +2,50 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
+USER=data
+OUTPUT=/app
 DOMAIN=$(ref DOMAIN localhost)
 SERVER=$(ref SERVER 127.0.0.1)
 GATEWAY=$(ref GATEWAY 192.168.1.1)
 CA=$(ref CA 127.0.0.1)
-LOGIN=$(ref LOGIN data:data)
-LOGIN_NAME=$(ref ${LOGIN%:*})
-LOGIN_PASS=$(ref ${LOGIN##*:})
+LOGIN=$(ref LOGIN "$USER:$USER")
 DNSIMPLE=$(DNSIMPLE '')
 
-# Create .htpasswd file for authentication
-rm -rf /app/.htpasswd
-htpasswd -cb /app/.htpasswd $LOGIN_NAME $LOGIN_PASS
-chown data:data /app/.htpasswd
-chmod 640 /app/.htpasswd
-
-# Find all proxy files and run proxify
+# Find all proxy files and run proxify. Creates:
+# - /app/nginx.conf
+# - /app/*.nginx.conf
+# - /app/dnsmasq.conf
+# - /app/*.dnsmasq.conf
+# - /app/*.dnsimple.sh
+# - /app/htpasswd
+# - /app/ca.crt
+# - /app/ca.crl
+# - /app/ca.pem
+# - /app/*.key
+# - /app/*.pem
 for f in $(find /app/var -maxdepth 2 -name "*.proxy"); do
   cd /app && proxify $f
 done
 
 # nginx configuration
-cat /app/nginx.*.conf >> /app/nginx.sites.conf
-cat /app/var/nginx/nginx.*.conf >> /app/nginx.sites.conf
-deref /app/nginx.sites.conf
+rm -rf /app/000.nginx.conf
+cat /app/var/nginx/*.nginx.conf >> /app/000.nginx.conf
+deref /app/000.nginx.conf
 
 # dnsmasq configuration
-cat /app/dnsmasq.*.conf >> /app/dnsmasq.sites.conf
-cat /app/var/dnsmasq/dnsmasq.*.conf >> /app/dnsmasq.sites.conf
-deref /app/dnsmasq.sites.conf
+rm -rf /app/000.dnsmasq.conf
+cat /app/var/dnsmasq/*.dnsmasq.conf >> /app/000.dnsmasq.conf
+deref /app/000.dnsmasq.conf
 
 # Run dnsimple scripts
-cat /app/dnsimple.*.sh >> /app/dnsimple.sh
-deref /app/dnsimple.sh
+rm -rf /app/dnsimple.conf
+cat /app/*.dnsimple.sh >> /app/dnsimple.sh
 chmod a+x /app/dnsimple.sh
 /app/dnsimple.sh
 
-# Start the service
-deref /app/nginx.conf
+# Start up nginx and dnsmasq
 nginx -p /app -c /app/nginx.conf
-
-# Start up dnsmasq
-deref /app/dnsmasq.conf
 dnsmasq --conf-file=/app/dnsmasq.conf
 
 # Watch the log and keep the container alive
-mkdir -p /var/log/nginx && touch /var/log/dnsmasq.log
-tail -F /var/log/nginx/* -F /var/log/dnsmasq.log
+tail -F /app/*.log
