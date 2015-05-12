@@ -1,10 +1,10 @@
 # 2015 Jon Suderman
 # https://github.com/suderman/docker
-IMAGE=suderman/proxy
-CONTAINER=proxy
+IMAGE=suderman/proxify
+CONTAINER=proxify
 
 all:
-	@echo "image container setup nginx dnsmasq proxy"
+	@echo "image container setup nginx dnsmasq proxify"
 
 # Build the image from the Dockerfile
 image:
@@ -32,7 +32,7 @@ container: setup
 	--volume $(DATA):/data                 \
 	$(IMAGE)
 
-setup: nginx dnsmasq proxy
+setup: nginx dnsmasq proxify
 
 # Copy all nginx config files to this directory's var
 nginx:
@@ -48,9 +48,9 @@ dnsmasq:
 		cp -f $$config ./var/dnsmasq;                                  \
 	done;
 
-# Copy all proxy config files to this directory's var
-proxy:
-	rm -rf ./var/proxy && mkdir -p ./var/proxy;                      \
-	for config in $$(find .. -maxdepth 2 -name "*.proxy"); do        \
-		cp -f $$config ./var/proxy;                                    \
+# Copy all proxify config files to this directory's var
+proxify:
+	rm -rf ./var/proxify && mkdir -p ./var/proxify;                  \
+	for config in $$(find .. -maxdepth 2 -name "*.proxify"); do      \
+		cp -f $$config ./var/proxify;                                  \
 	done;

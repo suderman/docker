@@ -9,7 +9,7 @@ SERVER=$(ref SERVER 127.0.0.1)
 GATEWAY=$(ref GATEWAY 192.168.1.1)
 CA=$(ref CA 127.0.0.1)
 LOGIN=$(ref LOGIN "$USER:$USER")
-DNSIMPLE=$(DNSIMPLE '')
+DNSIMPLE=$(ref DNSIMPLE '')
 
 # Find all proxy files and run proxify. Creates:
 # - /app/nginx.conf
