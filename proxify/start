@@ -30,7 +30,8 @@ for f in $(find /app/var -maxdepth 2 -name "*.proxify"); do
 done
 
 # Ensure directories exist
-mkdir -p /app/nginx /app/dnsmasq /app/dnsimple /app/certs /app/log
+directories="/app/nginx /app/dnsmasq /app/dnsimple /app/certs /app/log"
+mkdir -p $directories
 
 # nginx configuration
 rm -rf /app/nginx/000.nginx.conf
@@ -45,6 +46,10 @@ deref /app/dnsmasq/000.dnsmasq.conf
 # Run dnsimple scripts
 chmod a+x /app/dnsimple.sh
 /app/dnsimple.sh
+
+# Ensure proper permissions
+chown -R $USER $directories
+chgrp -R $USER $directories
 
 # Start up nginx and dnsmasq
 nginx -p /app -c /app/nginx.conf
