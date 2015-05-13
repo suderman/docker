@@ -1,13 +1,13 @@
 #!/bin/bash
 
 # 2015 Jon Suderman
-# https://github.com/suderman/local
+# https://github.com/suderman/docker
 
 # Helper methods for prettier shell scripting - http://suderman.github.io/shelper
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # List of containers (order is significant!)
-containers="padlock mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba webdav proxy"
+containers="padlock mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba webdav proxify"
 
 # Where docker directories are found
 docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)

@@ -20,6 +20,9 @@ RUN git clone https://github.com/suderman/padlock.git /app/padlock && \
     cd /app/padlock                                                && \
     npm install
 
+# Store files in volume
+RUN ln -sf /app/var /app/padlock/ca 
+
 # Add files
 ADD ./env /app/padlock/.env
 ADD ./start /app/start

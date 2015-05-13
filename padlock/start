@@ -3,6 +3,7 @@ eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper
 
 # Set environment variables
 export DOMAIN=$(ref DOMAIN 'localhost')
+deref /app/padlock/.env
 
 # Start the node server
-cd /app/padlock && npm start
+cd /app/padlock && git pull && npm start

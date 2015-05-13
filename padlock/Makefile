@@ -8,11 +8,12 @@ all:
 
 # Build the image from the Dockerfile
 image:
-	@echo "docker build --tag $(IMAGE) ."
+	docker build --tag $(IMAGE) .
 
 # Create a new detached container from the image
 container:
-	echo docker run                     \
+	mkdir -p ./var/;                    \
+	docker run                          \
 	--detach                            \
 	--name $(CONTAINER)                 \
 	--env DOMAIN="$(DOMAIN)"            \
