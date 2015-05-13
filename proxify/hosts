@@ -1,11 +1,11 @@
 # Devices on Network
 #-------------------
 
-# Airport Express
-10.0.0.1        airport
+# Asus RT Router
+10.0.0.1        rt
 
 # Intel NUC
-10.0.0.2        nuc api
+10.0.0.2        nuc
 
 # ISY-994i
 10.0.0.3        isy

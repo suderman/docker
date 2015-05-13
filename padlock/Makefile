@@ -16,6 +16,7 @@ container:
 	docker run                          \
 	--detach                            \
 	--name $(CONTAINER)                 \
+	--hostname $(CONTAINER)             \
 	--env DOMAIN="$(DOMAIN)"            \
 	--publish 11443:11443               \
 	--publish 11180:11180               \
