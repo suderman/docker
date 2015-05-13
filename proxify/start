@@ -2,14 +2,14 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
-USER=data
-OUTPUT=/app
-DOMAIN=$(ref DOMAIN localhost)
-SERVER=$(ref SERVER 127.0.0.1)
-GATEWAY=$(ref GATEWAY 192.168.1.1)
-CA=$(ref CA 127.0.0.1)
-LOGIN=$(ref LOGIN "$USER:$USER")
-DNSIMPLE=$(ref DNSIMPLE '')
+export USER=data
+export OUTPUT=/app
+export DOMAIN=$(ref DOMAIN localhost)
+export SERVER=$(ref SERVER 127.0.0.1)
+export GATEWAY=$(ref GATEWAY 192.168.1.1)
+export CA=$(ref CA 127.0.0.1)
+export LOGIN=$(ref LOGIN "$USER:$USER")
+export DNSIMPLE=$(ref DNSIMPLE '')
 
 # Find all proxify files and run proxify. Creates:
 # - /app/nginx.conf
@@ -23,6 +23,7 @@ DNSIMPLE=$(ref DNSIMPLE '')
 # - /app/ca.pem
 # - /app/*.key
 # - /app/*.pem
+cd /app/proxify && git pull
 for f in $(find /app/var -maxdepth 2 -name "*.proxify"); do
   cd /app && proxify $f
 done
