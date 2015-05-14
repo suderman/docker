@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# 2015 Jon Suderman
+# https://github.com/suderman/docker
+
+# Backup directory
+backup=$DATA/backup
+mkdir -p $backup
+
+# Source and destination
+src=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)
+dest=$backup/docker.tar.gz
+
+# Excluding Plex cache
+exclude="$src/plex/var/Library/Application Support/Plex Media Server/Cache"
+
+# Create tar archive of config directory 
+sudo tar -pczf $dest $src --exclude $exclude 
+
+# Update permissions
+sudo chown -R data:data $DATA
+sudo chmod -R 775 $DATA
