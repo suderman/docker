@@ -3,8 +3,7 @@ eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper
 
 # Start the service
 chown -R data:data /app/var
-runas data /usr/bin/btsync --config /app/btsync.conf
-# sudo -H -u data bash -c "/usr/bin/btsync --config /app/btsync.conf" 
+runas data "/usr/bin/btsync --config /app/btsync.conf"
 
 # Tail the logs and keep the container alive
 tail -F /app/var/sync.log
