@@ -25,6 +25,7 @@ RUN git clone https://github.com/kandanapp/kandan.git /app/kandan
 WORKDIR /app/kandan
 RUN echo "gem 'mysql2'" >> Gemfile
 RUN bundle install
+RUN bundle exec rake assets:precompile
 
 # Modify config
 RUN sed -i "s/assets = false/assets = true/g" config/environments/production.rb

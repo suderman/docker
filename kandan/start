@@ -14,7 +14,6 @@ deref /app/kandan/config/database.yml
 cd /app/kandan && git pull 
 bundle exec rake db:create
 bundle exec rake db:migrate
-bundle exec rake assets:precompile
 bundle exec rake kandan:bootstrap
 
 # Start the app
