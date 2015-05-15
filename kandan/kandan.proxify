@@ -1,0 +1,3 @@
+kandan. :443,:4430  :6100 --ssl
+kandan. :80         :6100
+kandan. :8000       https://kandan. --redirect

@@ -1,0 +1,21 @@
+production:
+  adapter: mysql2
+  encoding: utf8
+  database: $DB_NAME
+  pool: 5
+  timeout: 5000
+  host: $DB_HOST
+  username: $DB_USER
+  password: $DB_PASS
+
+development:
+  adapter: sqlite3
+  database: db/development.sqlite3
+  pool: 5
+  timeout: 5000
+
+test:
+  adapter: sqlite3
+  database: db/test.sqlite3
+  pool: 5
+  timeout: 5000
