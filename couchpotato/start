@@ -1,0 +1,9 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Start the service
+chown -R data:data /app/couchpotato /app/var
+runas data "python /app/couchpotato/CouchPotato.py --daemon --console_log --data_dir /app/var --config_file /app/var/settings.conf"
+
+# Tail the logs to keep the container alive
+tail -F /app/var/logs/*

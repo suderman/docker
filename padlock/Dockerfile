@@ -2,6 +2,9 @@ FROM suderman/trusty
 
 MAINTAINER Jon Suderman <suderman@gmail.com>
 
+# Define mountable directories
+VOLUME ["/app/var"]
+
 # Install tools
 RUN                                                       \
   add-apt-repository -y ppa:chris-lea/node.js          && \
@@ -11,9 +14,6 @@ RUN                                                       \
           python-openssl                                  \
           nodejs
 RUN npm install -g node-gyp
-
-# Define mountable directories
-VOLUME ["/app/var"]
 
 # Install application
 RUN git clone https://github.com/suderman/padlock.git /app/padlock && \
