@@ -1,0 +1,4 @@
+#!/bin/bash
+
+# Backup all data
+/usr/bin/mysqldump -A > /app/var/dump.sql

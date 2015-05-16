@@ -1,0 +1,76 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Set environment variables
+export CA=$(ref CA '127.0.0.1')
+export DOMAIN=$(ref DOMAIN localhost)
+export LOGIN=$(ref LOGIN 'user:pass')
+export NAME=${LOGIN%%:*}
+export PASS=${LOGIN##*:}
+deref /app/my.cnf
+
+# Save the CA's certificate and CRL
+curl $CA/ca.crt > /app/var/ca.crt
+curl $CA/ca.crl > /app/var/ca.crl
+
+# Save the database's key & crt
+curl $CA/mariadb.${DOMAIN}.key > /app/var/mariadb.${DOMAIN}.key
+curl $CA/mariadb.${DOMAIN}.crt > /app/var/mariadb.${DOMAIN}.crt
+
+# Ensure /app/var/mysql has content
+mkdir -p /app/var/mysql
+defined "$(ls -A /app/var/mysql)" || cp -r /var/lib/mysql/* /app/var/mysql
+
+# Ensure mysql owns the /app/var/mysql
+chown -R mysql /app/var/mysql
+chown root /app/var/mysql/debian*.flag
+
+# Cleanup previous sockets
+rm -f /run/mysqld/mysqld.sock
+
+# Start MariaDB
+/usr/sbin/service mysql start
+
+# Create the debian system maintence user (password is auto generated)
+MAINT_PASS=$(cat /etc/mysql/debian.cnf | grep -m 1 "password\s*=\s*"| sed 's/^password\s*=\s*//')
+mysql -u root <<-EOF
+    GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '$MAINT_PASS';
+EOF
+
+# Create the password user (from $LOGIN)
+mysql -u root <<-EOF
+    GRANT ALL PRIVILEGES ON *.* TO '$NAME'@'localhost' IDENTIFIED BY '$PASS';
+    GRANT ALL PRIVILEGES ON *.* TO '$NAME'@'%' IDENTIFIED BY '$PASS';
+EOF
+
+# Create the root user (requires client cert)
+ISSUER=$(curl $CA/ca.sub)
+SUBJECT=$(curl $CA/root@mariadb.sub)
+mysql -u root <<-EOF
+    GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' 
+    REQUIRE SUBJECT '$SUBJECT'
+    AND ISSUER '$ISSUER' 
+    AND CIPHER 'DHE-RSA-AES256-SHA';
+EOF
+
+# Tail the logs and keep the container alive
+tail -F /var/log/mysql.log
+
+# mysqld --ssl-ca=/config/ca.crt --ssl-cert=/config/mariadb.crt --ssl-key=/config/mariadb.key --ssl-crl=/config/ca.crl
+# # Create the superuser
+# mysql -u root <<-EOF
+#     DELETE FROM mysql.user WHERE user = '$DB_USER';
+#     FLUSH PRIVILEGES;
+#
+#     CREATE USER '$DB_USER'@'localhost' IDENTIFIED BY '$DB_PASS';
+#     GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'localhost' WITH GRANT OPTION;
+#     # GRANT USAGE ON *.* TO '$DB_USER'@'localhost' REQUIRE SSL;
+#
+#     CREATE USER '$DB_USER'@'%' IDENTIFIED BY '$DB_PASS';
+#     GRANT ALL PRIVILEGES ON *.* TO '$DB_USER'@'%' WITH GRANT OPTION;
+#     # GRANT USAGE ON *.* TO '$DB_USER'@'%' REQUIRE SSL;
+# EOF
+
+    # DELETE FROM mysql.user WHERE user = '$DB_USER';
+    # DELETE FROM mysql.user WHERE user = 'root' AND host = '%';
+    # FLUSH PRIVILEGES;

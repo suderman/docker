@@ -5,6 +5,7 @@ MAINTAINER Jon Suderman <suderman@gmail.com>
 # Define mountable directories
 VOLUME ["/app/var"]
 
+# Install dependencies
 RUN apt-get update --fix-missing && \
     apt-get install -y              \
     ruby1.9.1-dev                   \
@@ -20,6 +21,7 @@ RUN apt-get update --fix-missing && \
     nodejs
 RUN gem install execjs
 
+# Install rails app
 RUN git clone https://github.com/kandanapp/kandan.git /app/kandan
 WORKDIR /app/kandan
 RUN echo "gem 'mysql2'" >> Gemfile
