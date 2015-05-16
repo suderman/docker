@@ -20,7 +20,6 @@ RUN apt-get update --fix-missing && \
     nodejs
 RUN gem install execjs
 
-
 RUN git clone https://github.com/kandanapp/kandan.git /app/kandan
 WORKDIR /app/kandan
 RUN echo "gem 'mysql2'" >> Gemfile

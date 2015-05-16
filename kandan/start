@@ -16,5 +16,8 @@ bundle exec rake db:create
 bundle exec rake db:migrate
 bundle exec rake kandan:bootstrap
 
+# Mounted volume is public system directory
+ln -sf /app/var /app/kandan/public/system
+
 # Start the app
 bundle exec rails server thin -p 6100 -e production

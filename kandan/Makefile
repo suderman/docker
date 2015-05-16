@@ -22,13 +22,3 @@ container:
 	--env LOGIN="$(LOGIN)"              \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)
-
-shell: 
-	docker run                   \
-	--rm -it                     \
-	--hostname $(CONTAINER)             \
-	--publish 6100:6100                 \
-	--env SERVER="$(SERVER)"            \
-	--env LOGIN="$(LOGIN)"              \
-	--volume $(shell pwd)/var:/app/var  \
-	$(IMAGE) /bin/bash
