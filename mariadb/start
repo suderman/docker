@@ -9,14 +9,20 @@ export NAME=${LOGIN%%:*}
 export PASS=${LOGIN##*:}
 deref /app/my.cnf
 
+# Link files to where they're expected
+ln -f /app/my.cnf /etc/mysql/my.cnf
+ln -f /app/mysqldump /etc/cron.daily/mysqldump
+
 # Directory for SSL
 mkdir -p /app/certs
 
 # Save the CA's certificate and CRL
+msg "Save the CA's certificate and CRL"
 curl $CA/ca.crt > /app/certs/ca.crt
 curl $CA/ca.crl.pem > /app/certs/ca.crl
 
 # Save the database's key & crt
+msg "Save the database's key & crt"
 curl $CA/mariadb.${DOMAIN}.key > /app/certs/mariadb.${DOMAIN}.key
 curl $CA/mariadb.${DOMAIN}.crt > /app/certs/mariadb.${DOMAIN}.crt
 
@@ -33,38 +39,36 @@ chown root /app/var/mysql/debian*.flag
 rm -f /run/mysqld/mysqld.sock
 
 # Start MariaDB
-/usr/sbin/mysqld                               \
-  --ssl-ca=/app/certs/ca.crt                   \
-  --ssl-capath=/app/certs                      \
-  --ssl-crl=/app/certs/ca.crl                  \
-  --ssl-cert=/app/certs/mariadb.${DOMAIN}.crt  \
-  --ssl-key=/app/certs/mariadb.${DOMAIN}.key   \
-  --ssl-cipher=DHE-RSA-AES256-SHA
+msg "Start MariaDB, wait 5 seconds..."
+service mysql start
+sleep 5
 
 # Create the debian system maintence user (password is auto generated)
+msg "Create the debian system maintence user (password is auto generated)"
 MAINT_PASS=$(cat /etc/mysql/debian.cnf | grep -m 1 "password\s*=\s*"| sed 's/^password\s*=\s*//')
 mysql -u root <<-EOF
     GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '$MAINT_PASS';
 EOF
 
 # Create the password user (from $LOGIN)
+msg "Create the password user (from \$LOGIN)"
 mysql -u root <<-EOF
     DELETE FROM mysql.user WHERE user = '$NAME';
-    FLUSH PRIVILEGES;
     GRANT ALL PRIVILEGES ON *.* TO '$NAME'@'localhost' IDENTIFIED BY '$PASS';
     GRANT ALL PRIVILEGES ON *.* TO '$NAME'@'%' IDENTIFIED BY '$PASS';
+    FLUSH PRIVILEGES;
 EOF
 
-# Create the root user (requires client cert)
+# Create the root user (requires client crt/key)
+msg "Create the root user (requires client crt/key)"
 ISSUER=$(curl $CA/ca.sub)
 SUBJECT=$(curl $CA/root@mariadb.sub)
 mysql -u root <<-EOF
     DELETE FROM mysql.user WHERE user = 'root' AND host = '%';
-    FLUSH PRIVILEGES;
     GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' 
     REQUIRE SUBJECT '$SUBJECT'
-    AND ISSUER '$ISSUER' 
-    AND CIPHER 'DHE-RSA-AES256-SHA';
+    AND ISSUER '$ISSUER';
+    FLUSH PRIVILEGES;
 EOF
 
 # Tail the logs and keep the container alive

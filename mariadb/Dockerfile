@@ -12,16 +12,12 @@ RUN                                                                             
   apt-get update --fix-missing                                                                                              && \
   apt-get install -y mariadb-server
 
-# Add config & link to where it's expected
+# Add config and cron job
 ADD ./my.cnf /app/my.cnf
-RUN ln -f /app/my.cnf /etc/mysql/my.cnf
-
-# Add cron job & link to where it's expected
 ADD ./mysqldump /app/mysqldump
 RUN chmod a+x /app/mysqldump
-RUN ln -f /app/mysqldump /etc/cron.daily/mysqldump
 
-# Add start file 
+# Add files 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 
