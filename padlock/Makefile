@@ -22,5 +22,4 @@ container:
 	--publish 11180:11180               \
 	--publish 11188:11188               \
 	--volume $(shell pwd)/var:/app/var  \
-	--volume $(DATA):/data              \
 	$(IMAGE)

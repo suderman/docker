@@ -2,7 +2,7 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
-export CA=$(ref CA '127.0.0.1')
+export CA=$(ref CA '127.0.0.1:11443')
 export DOMAIN=$(ref DOMAIN localhost)
 export LOGIN=$(ref LOGIN 'user:pass')
 export NAME=${LOGIN%%:*}
