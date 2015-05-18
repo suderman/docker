@@ -1,0 +1,19 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Keep ATVSettings saved in /app/var
+touch /app/var/ATVSettings.cfg
+ln -sf /app/var/ATVSettings.cfg /app/plexconnect/ATVSettings.cfg
+
+# Touch log and fix permissions
+touch /app/plexconnect/PlexConnect.log
+chown -R data:data /app/var /app/plexconnect
+
+# Check for updates
+cd /app/plexconnect && git pull
+
+# Start the service
+runas data "python /app/plexconnect/PlexConnect.py &"
+
+# Watch the log and keep the container alive
+tail -F /app/plexconnect/PlexConnect.log
