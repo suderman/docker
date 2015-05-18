@@ -1,0 +1,15 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Link config files to where they're expected
+ln -f /app/avahi-daemon.conf /etc/avahi/avahi-daemon.conf
+ln -f /app/smb.conf          /etc/samba/smb.conf
+ln -f /app/samba.service     /etc/avahi/services/samba.service
+
+# Start the services
+service avahi-daemon start
+service samba start
+service nmbd start
+
+# Tail the logs and keep the container alive
+tail -F /var/log/samba/log.*
