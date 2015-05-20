@@ -1,18 +1,16 @@
 # Docker services for my Intel NUC
 
-### Create data user on host
+### Create data user/group on host
 ```
-sudo mkdir -p /data
-sudo useradd --home-dir /data --shell /bin/bash data
-sudo usermod -p data data && usermod -U data
-sudo usermod -u 2000 data && groupmod -g 2000 data
-sudo gpasswd -a ${USER} data
+sudo useradd -mU -s /bin/bash -u 2000 data
+sudo passwd data
+sudo gpasswd -a $USER data  
 ```
 
 ### Install and configure docker
 ```
 sudo curl -sSL https://get.docker.com/ | sh
-sudo gpasswd -a ${USER} docker  
+sudo gpasswd -a $USER docker  
 sudo cp -f ~/.local/ubuntu/etc/default-docker /etc/default/docker  
 sudo service docker restart  
 ```
@@ -45,8 +43,8 @@ export GATEWAY="10.0.0.1"
 # Certificate Authority URL on Server
 export CA="http://10.0.0.2:11443"
 
-# Authentication for services (username:password)
-export LOGIN="myname:my-secr3t-passw0rd"
+# Comma-delimited authentication for services (username:password)
+export PASSWORDS="admin:super_secr3t,guest:passw0rd"
 
 # DNSimple API key (email:password)
 # router.domain.com should point to the router's public IP address
@@ -59,8 +57,12 @@ export DATA="/data"
 ### Services
 
 - [padlock](https://github.com/suderman/padlock)
+- [proxify](https://github.com/suderman/proxify)
+  - [nginx](http://nginx.org/)
+  - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 - [mariadb](https://mariadb.org/)
 - [homemaker](https://github.com/suderman/homemaker)
+- [kandan](http://http://getkandan.com/)
 - [plex](https://plex.tv/)
 - [plexconnect](https://github.com/iBaa/PlexConnect)
 - [btsync](https://www.getsync.com/)
@@ -68,7 +70,4 @@ export DATA="/data"
 - [couchpotato](https://couchpota.to/)
 - [samba](https://www.samba.org/)
 - [webdav](http://httpd.apache.org/docs/2.2/mod/mod_dav.html)
-- [proxify](https://github.com/suderman/proxify)
-  - [nginx](http://nginx.org/)
-  - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 

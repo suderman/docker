@@ -8,7 +8,7 @@ export DOMAIN=$(ref DOMAIN localhost)
 export SERVER=$(ref SERVER 127.0.0.1)
 export GATEWAY=$(ref GATEWAY 192.168.1.1)
 export CA=$(ref CA '127.0.0.1:11443')
-export LOGIN=$(ref LOGIN "$USER:$USER")
+export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
 export DNSIMPLE=$(ref DNSIMPLE '')
 
 # Find all proxify files and run proxify. Creates:
