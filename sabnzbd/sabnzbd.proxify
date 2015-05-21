@@ -1,3 +1,3 @@
-sabnzbd.  443,4430  8080              --ssl
+sabnzbd.  443,4430  8080              --secure
 sabnzbd.  80        8080
 sabnzbd.  8000      https://sabnzbd.  --redirect

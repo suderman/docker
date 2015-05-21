@@ -1,2 +1,2 @@
 trailers.apple.com :80  :10080
-trailers.apple.com :443 :10080 --ssl
+trailers.apple.com :443 :10080 --secure
