@@ -37,9 +37,6 @@ export DOMAIN="domain.com"
 # Server IP Address  
 export SERVER="10.0.0.2"  
 
-# Server's router IP Address
-export GATEWAY="10.0.0.1"
-
 # Certificate Authority URL on Server
 export CA="http://10.0.0.2:11443"
 

@@ -24,7 +24,6 @@ container: setup
 	--publish 53:53/udp                    \
 	--env DOMAIN="$(DOMAIN)"               \
 	--env SERVER="$(SERVER)"               \
-	--env GATEWAY="$(GATEWAY)"             \
 	--env CA="$(CA)"                       \
 	--env PASSWORDS="$(PASSWORDS)"         \
 	--env DNSIMPLE="$(DNSIMPLE)"           \
