@@ -3,27 +3,24 @@ eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper
 
 # Set environment variables
 export CA=$(ref CA '127.0.0.1:11443')
-export DOMAIN=$(ref DOMAIN localhost)
-export NAME=$(ref NAME $(key :first $PASSWORDS))
-export PASS=$(ref NAME $(val :first $PASSWORDS))
+export NAME=$(ref NAME mariadb.$DOMAIN)
+export USER=$(ref USER $(key :first $PASSWORDS))
+export PASS=$(ref PASS $(val :first $PASSWORDS))
 deref /app/my.cnf
 
 # Link files to where they're expected
 ln -f /app/my.cnf /etc/mysql/my.cnf
 ln -f /app/mysqldump /etc/cron.daily/mysqldump
 
-# Directory for SSL
-mkdir -p /app/certs
-
 # Save the CA's certificate and CRL
 msg "Save the CA's certificate and CRL"
-curl $CA/ca.crt > /app/certs/ca.crt
-curl $CA/ca.crl.pem > /app/certs/ca.crl
+copy $CA/ca.crt /app/certs/ca.crt
+copy $CA/ca.crl.pem /app/certs/ca.crl
 
 # Save the database's key & crt
 msg "Save the database's key & crt"
-curl $CA/mariadb.${DOMAIN}.key > /app/certs/mariadb.${DOMAIN}.key
-curl $CA/mariadb.${DOMAIN}.crt > /app/certs/mariadb.${DOMAIN}.crt
+copy $CA/$NAME.key /app/certs/$NAME.key
+copy $CA/$NAME.crt /app/certs/$NAME.crt
 
 # Ensure /app/var/mysql has content
 mkdir -p /app/var/mysql
@@ -49,19 +46,19 @@ mysql -u root <<-EOF
     GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '$MAINT_PASS';
 EOF
 
-# Create the password user (from $LOGIN)
-msg "Create the password user (from \$LOGIN)"
+# Create the password user (from $USER:$PASS)
+msg "Create the password user (from $USER:$PASS)"
 mysql -u root <<-EOF
-    DELETE FROM mysql.user WHERE user = '$NAME';
-    GRANT ALL PRIVILEGES ON *.* TO '$NAME'@'localhost' IDENTIFIED BY '$PASS';
-    GRANT ALL PRIVILEGES ON *.* TO '$NAME'@'%' IDENTIFIED BY '$PASS';
+    DELETE FROM mysql.user WHERE user = '$USER';
+    GRANT ALL PRIVILEGES ON *.* TO '$USER'@'localhost' IDENTIFIED BY '$PASS';
+    GRANT ALL PRIVILEGES ON *.* TO '$USER'@'%' IDENTIFIED BY '$PASS';
     FLUSH PRIVILEGES;
 EOF
 
 # Create the root user (requires client crt/key)
 msg "Create the root user (requires client crt/key)"
 ISSUER=$(curl $CA/ca.sub)
-SUBJECT=$(curl $CA/root@mariadb.sub)
+SUBJECT=$(curl $CA/root@$NAME.sub)
 mysql -u root <<-EOF
     DELETE FROM mysql.user WHERE user = 'root' AND host = '%';
     GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' 

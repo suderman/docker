@@ -1,12 +1,14 @@
 production:
   adapter: mysql2
   encoding: utf8
-  database: $DB_NAME
+  database: $DATABASE
   pool: 5
   timeout: 5000
-  host: $DB_HOST
-  username: $DB_USER
-  password: $DB_PASS
+  host: $SERVER
+  username: root
+  sslkey: /app/certs/$NAME.key
+  sslcert: /app/certs/$NAME.crt
+  sslca: /app/certs/ca.crt
 
 development:
   adapter: sqlite3

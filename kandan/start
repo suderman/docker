@@ -2,14 +2,19 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
-export DB_USER=$(ref NAME $(key :first $PASSWORDS))
-export DB_PASS=$(ref NAME $(val :first $PASSWORDS))
-export DB_HOST=$(ref SERVER '127.0.0.1')
-export DB_NAME=kandan
-export RAILS_ENV=production
+export SERVER=$(ref SERVER '127.0.0.1')
+export DATABASE=kandan
+export CA=$(ref CA $CA)
+export NAME=$(ref NAME root@mariadb.$DOMAIN)
 deref /app/kandan/config/database.yml
 
+# Download certificate
+copy $CA/$NAME.key /app/certs/$NAME.key
+copy $CA/$NAME.crt /app/certs/$NAME.crt
+copy $CA/ca.crt /app/certs/ca.crt
+
 # Prepare the app
+export RAILS_ENV=production
 cd /app/kandan && git pull 
 bundle exec rake db:create
 bundle exec rake db:migrate
