@@ -2,10 +2,10 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
-export SERVER=$(ref SERVER '127.0.0.1')
-export DATABASE=kandan
-export CA=$(ref CA $CA)
+export SERVER=$(ref SERVER 127.0.0.1)
+export CA=$(ref CA $SERVER:11443)
 export NAME=$(ref NAME root@mariadb.$DOMAIN)
+export DATABASE=kandan
 deref /app/kandan/config/database.yml
 
 # Download certificate

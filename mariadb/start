@@ -2,7 +2,7 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
-export CA=$(ref CA '127.0.0.1:11443')
+export CA=$(ref CA $SERVER:11443)
 export NAME=$(ref NAME mariadb.$DOMAIN)
 export USER=$(ref USER $(key :first $PASSWORDS))
 export PASS=$(ref PASS $(val :first $PASSWORDS))

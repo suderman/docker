@@ -18,8 +18,8 @@ container:
 	--name $(CONTAINER)                 \
 	--hostname $(CONTAINER)             \
 	--publish 3306:3306                 \
-	--env CA="$(CA)"                    \
 	--env DOMAIN="$(DOMAIN)"            \
+	--env SERVER="$(SERVER)"            \
 	--env PASSWORDS="$(PASSWORDS)"      \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)

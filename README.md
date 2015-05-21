@@ -35,10 +35,10 @@ export PATH="$PATH:$HOME/docker/bin"
 export DOMAIN="domain.com"  
 
 # Server IP Address  
-export SERVER="10.0.0.2"  
+export SERVER="10.0.0.2"
 
-# Certificate Authority URL on Server
-export CA="http://10.0.0.2:11443"
+# Data directory on Server
+export DATA="/data"
 
 # Comma-delimited authentication for services (username:password)
 export PASSWORDS="admin:super_secr3t,guest:passw0rd"
@@ -46,9 +46,6 @@ export PASSWORDS="admin:super_secr3t,guest:passw0rd"
 # DNSimple API key (email:password)
 # router.domain.com should point to the router's public IP address
 export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"  
-
-# Data directory on Server
-export DATA="/data"
 ```
 
 ### Services

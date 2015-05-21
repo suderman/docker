@@ -20,6 +20,5 @@ container:
 	--publish 6100:6100                 \
 	--env DOMAIN="$(DOMAIN)"            \
 	--env SERVER="$(SERVER)"            \
-	--env CA="$(CA)"                    \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)

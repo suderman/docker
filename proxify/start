@@ -6,14 +6,14 @@ export USER=data
 export OUTPUT=/app
 export DOMAIN=$(ref DOMAIN localhost)
 export SERVER=$(ref SERVER 127.0.0.1)
-export CA=$(ref CA '127.0.0.1:11443')
+export CA=$(ref CA $SERVER:11443)
 export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
 export DNSIMPLE=$(ref DNSIMPLE '')
 
 # Find all proxify files and run proxify. Creates:
 # - /app/nginx.conf
 # - /app/nginx/*.nginx.conf
-# - /app/nginx/.htpasswd
+# - /app/htpasswd/*.htpasswd
 # - /app/dnsmasq.conf
 # - /app/dnsmasq/*.dnsmasq.conf
 # - /app/dnsimple.sh
