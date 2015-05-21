@@ -19,6 +19,6 @@ container:
 	--hostname $(CONTAINER)             \
 	--publish 6100:6100                 \
 	--env SERVER="$(SERVER)"            \
-	--env LOGIN="$(LOGIN)"              \
+	--env PASSWORDS="$(PASSWORDS)"      \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)

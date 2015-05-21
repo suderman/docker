@@ -4,9 +4,8 @@ eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper
 # Set environment variables
 export CA=$(ref CA '127.0.0.1:11443')
 export DOMAIN=$(ref DOMAIN localhost)
-export LOGIN=$(ref LOGIN 'user:pass')
-export NAME=${LOGIN%%:*}
-export PASS=${LOGIN##*:}
+export NAME=$(ref NAME $(key :first $PASSWORDS))
+export PASS=$(ref NAME $(val :first $PASSWORDS))
 deref /app/my.cnf
 
 # Link files to where they're expected

@@ -20,6 +20,6 @@ container:
 	--publish 3306:3306                 \
 	--env CA="$(CA)"                    \
 	--env DOMAIN="$(DOMAIN)"            \
-	--env LOGIN="$(LOGIN)"              \
+	--env PASSWORDS="$(PASSWORDS)"      \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)

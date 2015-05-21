@@ -19,6 +19,6 @@ container:
 	--publish 7000:7000                 \
 	--publish 7001:7001                 \
 	--env SERVER="$(SERVER)"            \
-	--env LOGIN="$(LOGIN)"              \
+	--env PASSWORDS="$(PASSWORDS)"      \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)
