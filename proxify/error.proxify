@@ -1,2 +1,2 @@
 error.  80,8000   /app/error/
-error.  443,4430  http://error. --redirect
+error.  443,4430  http://error. --redirect --secure .

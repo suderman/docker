@@ -11,6 +11,7 @@ export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
 export DNSIMPLE=$(ref DNSIMPLE '')
 
 # Find all proxify files and run proxify. Creates:
+# - /app/start.sh
 # - /app/nginx.conf
 # - /app/nginx/*.nginx.conf
 # - /app/htpasswd/*.htpasswd
@@ -20,39 +21,29 @@ export DNSIMPLE=$(ref DNSIMPLE '')
 # - /app/dnsimple/*.dnsimple.sh
 # - /app/certs/ca.crt
 # - /app/certs/ca.crl
-# - /app/certs/ca.pem
-# - /app/certs/*.key
 # - /app/certs/*.pem
 cd /app/proxify && git pull
-for f in $(find /app/var -maxdepth 2 -name "*.proxify"); do
-  cd /app && proxify $f
+for FILE in $(find /app/var -maxdepth 2 -name "*.proxify"); do
+  cd /app && proxify $FILE
 done
 
 # Ensure directories exist
-directories="/app/nginx /app/dnsmasq /app/dnsimple /app/certs /app/log"
+directories="/app/nginx /app/dnsmasq /app/dnsimple /app/certs /app/log /app/error"
 mkdir -p $directories
 
-# nginx configuration
-rm -rf /app/nginx/000.nginx.conf
-cat /app/var/nginx/*.nginx.conf >> /app/nginx/000.nginx.conf
-deref /app/nginx/000.nginx.conf
-
-# dnsmasq configuration
-rm -rf /app/dnsmasq/000.dnsmasq.conf
-cat /app/var/dnsmasq/*.dnsmasq.conf >> /app/dnsmasq/000.dnsmasq.conf
-deref /app/dnsmasq/000.dnsmasq.conf
-
-# Run dnsimple scripts
-chmod a+x /app/dnsimple.sh
-/app/dnsimple.sh
+# additional nginx, dnsmasq configuration
+for CONF in nginx dnsmasq; do
+  rm -rf /app/${CONF}/000.${CONF}.conf
+  cat /app/var/${CONF}/*.${CONF}.conf >> /app/${CONF}/000.${CONF}.conf
+  deref /app/${CONF}/000.${CONF}.conf
+done
 
 # Ensure proper permissions
 chown -R $USER $directories
 chgrp -R $USER $directories
 
-# Start up nginx and dnsmasq
-nginx -p /app -c /app/nginx.conf
-dnsmasq --conf-file=/app/dnsmasq.conf
+# Run dnsimple scripts, start nginx & dnsmasq
+/app/start.sh
 
 # Watch the log and keep the container alive
 tail -F /app/log/*.log

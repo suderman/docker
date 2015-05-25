@@ -1,3 +1,3 @@
-btsync. :443,:4430  :8888 --secure
-btsync. :80         :8888
-btsync. :8000       https://btsync. --redirect
+btsync. 443,4430 8888   --secure
+btsync. 8000     https: --redirect
+btsync. 80       8888

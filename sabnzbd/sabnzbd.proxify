@@ -1,3 +1,5 @@
-sabnzbd.  443,4430  8080              --secure
-sabnzbd.  80        8080
-sabnzbd.  8000      https://sabnzbd.  --redirect
+     sabnzbd.  443,4430  8080,auth.sabnzbd. --secure          --authenticate
+auth.sabnzbd.  443,4430  8080               --secure sabnzbd. --authenticate admin
+     sabnzbd.  8000      https:             --redirect
+auth.sabnzbd.  8000      https:             --redirect
+     sabnzbd.  80        8080
