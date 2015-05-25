@@ -1,3 +1,5 @@
-couchpotato. 443,4430 5050   --secure
-couchpotato. 8000     https: --redirect
-couchpotato. 80       5050
+     couchpotato.  443,4430  5050,auth.couchpotato. --secure               --authenticate
+auth.couchpotato.  443,4430  5050                   --secure couchpotato.  --authenticate jon
+     couchpotato.  8000      https:                 --redirect
+auth.couchpotato.  8000      https:                 --redirect
+     couchpotato.  80        5050
