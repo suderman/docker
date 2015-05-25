@@ -1,6 +1,8 @@
-DB_HOST=$DB_HOST
-DB_USER=$DB_USER
-DB_PASS=$DB_PASS
+DB_HOST=$SERVER
+DB_USER=root
 DB_NAME=homemaker
+DB_KEY=/app/certs/$NAME.key
+DB_CERT=/app/certs/$NAME.crt
+DB_CA=/app/certs/ca.crt
 PORT=7000
 API_PORT=7001

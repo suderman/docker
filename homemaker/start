@@ -2,10 +2,15 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
-export DB_USER=$(ref NAME $(key :first $PASSWORDS))
-export DB_PASS=$(ref NAME $(val :first $PASSWORDS))
-export DB_HOST=$(ref SERVER '127.0.0.1')
+export SERVER=$(ref SERVER 127.0.0.1)
+export CA=$(ref CA $SERVER:11443)
+export NAME=$(ref NAME root@mariadb.$DOMAIN)
 deref /app/homemaker/.env
+
+# Download certificate
+copy $CA/$NAME.key /app/certs/$NAME.key
+copy $CA/$NAME.crt /app/certs/$NAME.crt
+copy $CA/ca.crt /app/certs/ca.crt
 
 # Start the node server
 cd /app/homemaker && git pull && npm run server

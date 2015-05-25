@@ -18,7 +18,7 @@ container:
 	--hostname $(CONTAINER)             \
 	--publish 7000:7000                 \
 	--publish 7001:7001                 \
+	--env DOMAIN="$(DOMAIN)"            \
 	--env SERVER="$(SERVER)"            \
-	--env PASSWORDS="$(PASSWORDS)"      \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)
