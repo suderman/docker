@@ -7,7 +7,7 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # List of containers (order is significant!)
-containers="padlock mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba webdav proxify"
+containers="padlock proxify mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba"
 
 # Where docker directories are found
 docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)
@@ -21,7 +21,7 @@ for container in $containers; do
 done
 
 if [ $# -eq 0 ]; then
-  msg "Usage: ds start stop restart clean clear refresh rebuild ls stats"
+  msg "Usage: ds start stop clean clear refresh rebuild ls info"
   exit 1
 fi
 
@@ -36,12 +36,6 @@ case $1 in
   "stop" )
     for service in $rservices; do
       cd $docker/$service && d stop
-    done
-    ;;
-
-  "restart" )
-    for service in $services; do
-      cd $docker/$service && d restart
     done
     ;;
 
@@ -79,9 +73,9 @@ case $1 in
     echo $services
     ;;
 
-  "stats" )
+  "info" )
     for service in $services; do
-      cd $docker/$service && d stats
+      cd $docker/$service && d info
       echo "------------------------------------"
     done
     ;;

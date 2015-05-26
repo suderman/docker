@@ -7,7 +7,7 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 if [ $# -eq 0 ]; then
-  msg "Usage: d start stop restart exec logs ip clean clear refresh rebuild push pull stats"
+  msg "Usage: d start stop exec logs ip clean clear refresh rebuild push pull info"
   exit 1
 fi
 
@@ -124,16 +124,6 @@ case $1 in
     fi
     ;;
 
-  # Execute restart.sh script
-  "restart" )
-    if running_container $cid; then
-      msg "[$container] Restarting container..."
-      docker exec $container /restart.sh
-    else
-      msg "[$container] Container stopped"
-    fi
-    ;;
-
   # Execute command in the container, or start shell
   "exec" )
     if running_container $cid; then
@@ -197,7 +187,7 @@ case $1 in
     ;;
     
   # Echo the image and container vars
-  "stats" )
+  "info" )
     if missing_image $image; then
       echo "Image: $image (missing)"
     else
