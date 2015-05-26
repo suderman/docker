@@ -26,7 +26,6 @@ if [ -z "$image" ]; then
   exit 1
 fi
 
-# Todo: a less fragile way to pull the container name from the Makefile
 container=$(sed -n -e 's/CONTAINER=//p' Makefile | tr -d " \t\n\r")
 if [ -z "$container" ]; then
   msg "Error: Cannot determine container"
@@ -34,6 +33,8 @@ if [ -z "$container" ]; then
 fi
 
 cid=$(docker ps | grep $container: | cut -d' ' -f1)
+
+dependencies=$(sed -n -e 's/DEPENDENCIES=//p' Makefile | tr -d " \t\n\r" | sed 's/,/ /g')
 
 # Check if an image is missing and needs to be built
 missing_image() {
@@ -88,6 +89,13 @@ delete_image() {
 
 # Create an image and container
 make_container() {
+
+  for dependency in $dependencies; do
+    if missing_container $dependency; then
+      msg "[$dependency] required dependency"
+      cd ../$dependency && d start && cd -
+    fi
+  done
 
   if missing_container $container; then
 
@@ -203,5 +211,6 @@ case $1 in
     else
       echo "CID: (stopped)"
     fi
+    echo "Dependencies: $dependencies"
     ;;
 esac

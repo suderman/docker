@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/samba
 CONTAINER=samba
+DEPENDENCIES=
 
 all:
 	@echo "image container"

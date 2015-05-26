@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/mariadb
 CONTAINER=mariadb
+DEPENDENCIES=padlock
 
 all:
 	@echo "image container"

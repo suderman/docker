@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/padlock
 CONTAINER=padlock
+DEPENDENCIES=
 
 all:
 	@echo "image container"

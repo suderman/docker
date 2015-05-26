@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/btsync
 CONTAINER=btsync
+DEPENDENCIES=
 
 all:
 	@echo "image container"

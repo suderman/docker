@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/plexconnect
 CONTAINER=plexconnect
+DEPENDENCIES=plex
 
 all:
 	@echo "image container"

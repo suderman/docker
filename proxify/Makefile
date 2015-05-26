@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/proxify
 CONTAINER=proxify
+DEPENDENCIES=padlock
 
 all:
 	@echo "image container setup nginx dnsmasq proxify"

@@ -6,18 +6,13 @@
 # Helper methods for prettier shell scripting - http://suderman.github.io/shelper
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
-# List of containers (order is significant!)
-containers="padlock proxify mariadb homemaker plex plexconnect btsync sabnzbd couchpotato samba"
-
 # Where docker directories are found
 docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)
 
-# Build list and reverse-list of services
-for container in $containers; do
-  if has $docker/$container; then
-    services="$services $container"
-    rservices="$container $rservices"
-  fi
+db=""; for makefile in $(find $docker/*/Makefile); do
+  path=$(dirname $makefile)
+  container=$(basename $path)
+  db="$db,$container:$path"
 done
 
 if [ $# -eq 0 ]; then
@@ -28,54 +23,54 @@ fi
 case $1 in
 
   "start" )
-    for service in $services; do
-      cd $docker/$service && d start
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d start
     done
     ;;
 
   "stop" )
-    for service in $rservices; do
-      cd $docker/$service && d stop
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d stop
     done
     ;;
 
   "clean" )
-    for service in $rservices; do
-      cd $docker/$service && d clean
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d clean
     done
     ;;
 
   "clear" )
-    for service in $rservices; do
-      cd $docker/$service && d clear
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d clear
     done
     ;;
 
   "refresh" )
-    for service in $rservices; do
-      cd $docker/$service && d clean
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d clean
     done
-    for service in $services; do
-      cd $docker/$service && d start
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d start
     done
     ;;
 
   "rebuild" )
-    for service in $rservices; do
-      cd $docker/$service && d clear
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d clear
     done
-    for service in $services; do
-      cd $docker/$service && d start
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d start
     done
     ;;
 
   "ls" )
-    echo $services
+    echo $(key :all $db)
     ;;
 
   "info" )
-    for service in $services; do
-      cd $docker/$service && d info
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d info
       echo "------------------------------------"
     done
     ;;

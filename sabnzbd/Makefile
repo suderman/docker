@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/sabnzbd
 CONTAINER=sabnzbd
+DEPENDENCIES=
 
 all:
 	@echo "image container"

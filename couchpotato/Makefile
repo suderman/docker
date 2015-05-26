@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/couchpotato
 CONTAINER=couchpotato
+DEPENDENCIES=
 
 all:
 	@echo "image container"

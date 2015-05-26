@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/homemaker
 CONTAINER=homemaker
+DEPENDENCIES=padlock,mariadb
 
 all:
 	@echo "image container"

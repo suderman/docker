@@ -2,6 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/kandan
 CONTAINER=kandan
+DEPENDENCIES=padlock,mariadb
 
 all:
 	@echo "image container"
