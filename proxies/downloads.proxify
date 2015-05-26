@@ -1,5 +1,6 @@
-     downloads.  443,4430  /data/downloads,auth.downloads. --secure            --authenticate
-auth.downloads.  443,4430  /data/downloads                 --secure downloads. --authenticate jon
-auth.downloads.  8000      https: --redirect
-     downloads.  8000      https: --redirect
-     downloads.  80        /data/downloads
+     downloads.  4430      /data/downloads,auth.downloads.  --secure             --authenticate
+auth.downloads.  4430      /data/downloads                  --secure downloads.  --authenticate jon
+     downloads.  443       /data/downloads                  --secure
+auth.downloads.  443       downloads.  --redirect           --secure downloads.   
+     downloads.  80,8000   https:      --redirect
+auth.downloads.  80,8000   https:      --redirect

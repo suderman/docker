@@ -1,5 +1,6 @@
-     rt.  443,4430  10.0.0.1:80,auth.rt. --secure             --authenticate
-auth.rt.  443,4430  10.0.0.1:80          --secure downloads.  --authenticate admin
-auth.rt.  8000      https: --redirect
-     rt.  8000      https: --redirect
-     rt.  80        10.0.0.1:80
+     rt.  4430      10.0.0.1:80,auth.rt. --secure     --authenticate
+auth.rt.  4430      10.0.0.1:80          --secure rt. --authenticate admin
+     rt.  443       10.0.0.1:80          --secure
+auth.rt.  443       rt.    --redirect    --secure rt.  
+     rt.  80,8000   https: --redirect
+auth.rt.  80,8000   https: --redirect

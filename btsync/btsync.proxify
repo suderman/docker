@@ -1,5 +1,6 @@
-     btsync.  443,4430  8888,auth.btsync. --secure          --authenticate
-auth.btsync.  443,4430  8888              --secure btsync.  --authenticate admin
-     btsync.  8000      https:            --redirect
-auth.btsync.  8000      https:            --redirect
-     btsync.  80        8888
+     btsync.  4430      8888,auth.btsync. --secure         --authenticate
+auth.btsync.  4430      8888              --secure btsync. --authenticate admin
+     btsync.  443       8888              --secure
+auth.btsync.  443       btsync.           --secure btsync. --redirect 
+     btsync.  80,8000   https:            --redirect
+auth.btsync.  80,8000   https:            --redirect

@@ -1,16 +1,18 @@
-       api.  443,4430  7000,auth.api.   --secure          --authenticate
-  auth.api.  443,4430  7000             --secure api.     --authenticate admin
-       api.  80        7000
-       api.  8000      https:           --redirect
+       api.  4430      7000,auth.api.  --secure           --authenticate
+  auth.api.  4430      7000            --secure api.      --authenticate admin
+       api.  443       7000            --secure
+  auth.api.  443       api.            --secure api.      --redirect 
+       api.  80,8000   https:          --redirect
+  auth.api.  80,8000   https:          --redirect
 
-    db.api.  443,4430  7001             --secure api.     --authenticate
-    db.api.  80        7001
-    db.api.  8000      https:           --redirect
+    db.api.  4430      7001            --secure api.      --authenticate
+    db.api.  443       7001            --secure api.
+    db.api.  80,8000   https:          --redirect
 
-   api.dev.  443,4430  5005             --secure          --authenticate
-   api.dev.  80        5005
-   api.dev.  8000      https:           --redirect
+   api.dev.  4430      5005            --secure           --authenticate
+   api.dev.  443       5005            --secure
+   api.dev.  80,8000   https:          --redirect
 
-db.api.dev.  443,4430  5006             --secure api.dev. --authenticate
-db.api.dev.  80        5006
-db.api.dev.  8000      https:           --redirect
+db.api.dev.  4430      5006            --secure api.dev.  --authenticate
+db.api.dev.  443       5006            --secure api.dev.
+db.api.dev.  80,8000   https:          --redirect

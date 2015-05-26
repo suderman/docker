@@ -1,7 +1,9 @@
-     ca. 443,4430 11443,auth.ca. --secure     --authenticate
-auth.ca. 443,4430 11443          --secure ca. --authenticate admin
+     ca. 4430     11443,auth.ca. --secure     --authenticate
+auth.ca. 4430     11443          --secure ca. --authenticate admin
 auth.ca. 8000     https:         --redirect
-auth.ca. 80       ca.            --redirect
-     ca. 80       11443
+auth.ca. 80       https://ca.    --redirect
+     ca. 443      11443          --secure
+     ca. 80       https:         --redirect
      ca. 8000     11180
 ocsp.ca. 80,8000  11188
+
