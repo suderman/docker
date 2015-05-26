@@ -63,5 +63,16 @@ export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
 - [sabnzbd](http://sabnzbd.org/)
 - [couchpotato](https://couchpota.to/)
 - [samba](https://www.samba.org/)
+
+#### Others still to set up:
+- openvpn
+- nzbdrone
+- nzbget
+- transmission
+- mpd
+- NZBmegasearcH
+- Redis
+- ZNC
+- tmate
 - [webdav](http://httpd.apache.org/docs/2.2/mod/mod_dav.html)
 
