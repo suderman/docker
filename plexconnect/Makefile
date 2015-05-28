@@ -13,11 +13,12 @@ image:
 
 # Create a new detached container from the image
 container: 
-	mkdir -p ./var/;                             \
-	docker run                                   \
-	--detach                                     \
-	--name $(CONTAINER)                          \
-	--hostname $(CONTAINER)                      \
-	--publish 32480:32480	                       \
-	--volume $(shell pwd)/var:/app/var           \
+	mkdir -p ./var/;                    \
+	docker run                          \
+	--detach                            \
+	--name $(CONTAINER)                 \
+	--hostname $(CONTAINER)             \
+	--publish 32480:32480	              \
+	--env SERVER="$(SERVER)"            \
+	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)
