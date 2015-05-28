@@ -12,6 +12,7 @@ RUN                                                       \
   apt-get install -y                                      \
           python2.7                                       \
           python-openssl                                  \
+          openvpn                                         \
           nodejs
 RUN npm install -g node-gyp
 
