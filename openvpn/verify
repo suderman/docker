@@ -1,0 +1,35 @@
+#!/bin/bash
+eval "$(cat /app/.local/share/shelper.sh)"
+
+domain=$NAME
+ocsp=$OCSP
+ca=/app/ca.crt
+cn=$X509_0_CN
+serial=$tls_serial_0
+
+# Only check the client certificate's depth 
+[[ "$1" = "0" ]] || exit 0 
+
+# Match CN user@domain.com against domain.com
+[[ "${cn##*@}" = "$domain" ]] || exit 1
+
+# Ensure certificate serial exists
+defined $serial || exit 1 
+
+# Run OCSP command
+status=$(openssl ocsp -nonce -issuer $ca -CAfile $ca -url $OCSP -serial $serial 2>&1)
+
+# Check for error code
+[[ "$?" = "0" ]] || exit 1
+
+# Check for error/fail status
+(echo "$status" | grep -Eq "(error|fail)") && exit 1
+
+# Check verify OK
+(echo "$status" | grep -Fq "Response verify OK") || exit 1
+
+# Check for good status (not revoked)
+(echo "$status" | grep -Fq "${serial}: good") || exit 1
+
+# Survied this far? Must be OK!
+exit 0

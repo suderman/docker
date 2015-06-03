@@ -1,0 +1,22 @@
+auto br0
+iface br0 inet static
+  address 10.8.1.1
+  netmask 255.255.255.0
+  gateway 192.168.0.1
+  network 192.168.0.0
+  broadcast 192.168.0.255
+  bridge_ports eth0
+  dns-nameservers 8.8.8.8 4.4.4.4
+  bridge_fd 9
+  bridge_hello 2
+  bridge_maxage 12
+  bridge_stp off
+
+auto br0
+iface br0 inet dhcp
+  bridge_ports em1
+  bridge_fd 9
+  bridge_hello 2
+  bridge_maxage 12
+  bridge_stp off
+ 

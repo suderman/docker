@@ -1,0 +1,37 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Set environment variables
+export SERVER=$(ref SERVER 127.0.0.1)
+export CA=$(ref CA http://$SERVER:11443)
+export OCSP=$(ref OCSP http://$SERVER:11188)
+export NAME=$(ref NAME vpn.$DOMAIN)
+
+# Activate forwarding
+append "net.ipv4.ip_forward=1" /etc/sysctl.conf
+
+# Download CA certificate
+copy $CA/ca.crt /app/ca.crt
+
+# Download OVPN profile prepended with tun/tap.conf
+curl $CA/$NAME.tun.ovpn | cat /app/tun.conf - > /app/$NAME.tun.ovpn
+curl $CA/$NAME.tap.ovpn | cat /app/tap.conf - > /app/$NAME.tap.ovpn
+chmod 600 /app/*.ovpn
+
+# Expand any variables
+deref /app/$NAME.tun.ovpn
+deref /app/$NAME.tap.ovpn
+deref /app/verify
+
+# Make sure that /dev/net/tun exists
+[ -d /dev/net     ] || mkdir -p /dev/net
+[ -c /dev/net/tun ] || mknod /dev/net/tun c 10 200
+
+# iptables rule to masquerade all the traffic coming from VPN clients
+iptables -t nat -A POSTROUTING -s 10.8.0.0/24 -o eth0 -j MASQUERADE
+
+# Start openvpn and tail the log
+cd /app && touch tun.log tap.log
+while true; do openvpn /app/$NAME.tun.ovpn; done >> /app/tun.log &
+#while true; do openvpn /app/$NAME.tap.ovpn; done >> /app/tap.log &
+tail -F /app/*.log
