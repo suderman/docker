@@ -11,8 +11,10 @@ image:
 	docker build --tag $(IMAGE) .
 
 # Create a new interactive container from the image
-container: 
+shell: 
 	docker run                   \
 	--rm -it                     \
+	--net host                   \
+	--privileged                 \
 	--volume $(DATA):/data       \
 	$(IMAGE) /bin/bash
