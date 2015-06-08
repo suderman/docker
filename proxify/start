@@ -10,6 +10,9 @@ export CA=$(ref CA $SERVER:11443)
 export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
 export DNSIMPLE=$(ref DNSIMPLE '')
 
+# Wait for Padlock to be running
+waitfor $CA
+
 # Find all proxify files and run proxify. Creates:
 # - /app/start.sh
 # - /app/nginx.conf

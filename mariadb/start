@@ -12,6 +12,9 @@ deref /app/my.cnf
 ln -f /app/my.cnf /etc/mysql/my.cnf
 ln -f /app/mysqldump /etc/cron.daily/mysqldump
 
+# Wait for Padlock to be running
+waitfor $CA
+
 # Save the CA's certificate and CRL
 msg "Save the CA's certificate and CRL"
 copy $CA/ca.crt /app/certs/ca.crt

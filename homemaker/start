@@ -2,14 +2,22 @@
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
 # Set environment variables
+export SERVER=$(ref SERVER 127.0.0.1)
+export DB=$(ref DB $SERVER:3306)
 export CA=$(ref CA $SERVER:11443)
 export NAME=$(ref NAME root@mariadb.$DOMAIN)
 deref /app/homemaker/.env
+
+# Wait for Padlock to be running
+waitfor $CA
 
 # Download certificate
 copy $CA/$NAME.key /app/certs/$NAME.key
 copy $CA/$NAME.crt /app/certs/$NAME.crt
 copy $CA/ca.crt /app/certs/ca.crt
+
+# Wait for MariaDB to be running
+waitfor $DB /app/certs/$NAME
 
 # Start the node server
 cd /app/homemaker && git pull && npm run server

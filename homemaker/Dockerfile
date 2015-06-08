@@ -10,6 +10,7 @@ RUN                                                       \
   add-apt-repository -y ppa:chris-lea/node.js          && \
   apt-get update --fix-missing                         && \
   apt-get install -y                                      \
+          mysql-client-core-5.5                           \
           python2.7                                       \
           python-openssl                                  \
           nodejs

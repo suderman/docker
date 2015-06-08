@@ -8,6 +8,7 @@ VOLUME ["/app/var"]
 # Install dependencies
 RUN apt-get update --fix-missing && \
     apt-get install -y              \
+    mysql-client-core-5.5           \
     ruby1.9.1-dev                   \
     ruby-bundler                    \
     libxslt-dev                     \
