@@ -54,6 +54,7 @@ export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
 ### Services
 
 - [padlock](https://github.com/suderman/padlock)
+- [openvpn](https://openvpn.net/)
 - [proxify](https://github.com/suderman/proxify)
   - [nginx](http://nginx.org/)
   - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
@@ -68,14 +69,14 @@ export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
 - [samba](https://www.samba.org/)
 
 #### Others still to set up:
-- openvpn
-- nzbdrone
-- nzbget
-- transmission
-- mpd
-- NZBmegasearcH
-- Redis
-- ZNC
-- tmate
+- [headphones](https://github.com/rembo10/headphones)
+- [sonarr](https://sonarr.tv/)
+- [nzbget](http://nzbget.net/)
+- [transmission](http://www.transmissionbt.com/)
+- [mpd](http://www.musicpd.org/)
+- [NZBmegasearcH](http://pillone.github.io/usntssearch/)
+- [Redis](http://redis.io/)
+- [ZNC](https://github.com/znc/znc)
+- [tmate](http://tmate.io/)
 - [webdav](http://httpd.apache.org/docs/2.2/mod/mod_dav.html)
 
