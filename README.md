@@ -37,6 +37,9 @@ export DOMAIN="domain.com"
 # Server IP Address  
 export SERVER="10.0.0.2"
 
+# Primary network interface  
+export ETH="eth0"
+
 # Data directory on Server
 export DATA="/data"
 

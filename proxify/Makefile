@@ -2,7 +2,7 @@
 # https://github.com/suderman/docker
 IMAGE=suderman/proxify
 CONTAINER=proxify
-DEPENDENCIES=padlock
+DEPENDENCIES=padlock,openvpn
 
 all:
 	@echo "image container setup nginx dnsmasq proxify"
