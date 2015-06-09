@@ -1,2 +1,2 @@
-plex.  4430,443  32400  --secure . --nginx 'if ($http_x_plex_device_name = "") { rewrite ^/$ /web/index.html; }'
+plex.  4430,443  32400  --secure . --nginx 'if ($http_x_plex_device_name = "") { rewrite ^/$ /web/index.html redirect; }'
 plex.  80,8000   https: --redirect
