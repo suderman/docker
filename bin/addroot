@@ -3,12 +3,9 @@
 # 2015 Jon Suderman
 # https://github.com/suderman/docker
 
-# Helper methods for prettier shell scripting - http://suderman.github.io/shelper
-eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
-
 # Where docker directories are found
 docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)
 
 # Copy Padlock's root CA and update system certificates
-sudo copy $docker/padlock/var/root/ca.crt /usr/local/share/ca-certificates/ca.crt
+sudo cp -f $docker/padlock/var/root/ca.crt /usr/local/share/ca-certificates/ca.crt
 sudo update-ca-certificates
