@@ -1,2 +1,3 @@
-kandan.  443,4430  6100   --secure
-kandan.  80,8000   https: --redirect
+kandan.  80
+kandan.  81   https:  --redirect
+kandan.  444  6100    --secure .

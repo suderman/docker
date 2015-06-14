@@ -1,2 +1,2 @@
-public.  80,8000   /data/public
-public.  443,4430  http: --redirect --secure .
+public.  80,81  /data/public
+public.  444    http: --redirect --secure .
