@@ -1,0 +1,16 @@
+#!/bin/bash
+direction=$1
+dev=$2
+mtu=$3
+
+if [[ "$direction" = "up" ]]; then
+
+  ifconfig $dev mtu $mtu promisc up
+  brctl addif $BR $dev
+
+elif [[ "$direction" = "down" ]]; then
+
+  brctl delif $BR $dev
+  ifconfig $dev down
+
+fi

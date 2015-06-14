@@ -20,20 +20,8 @@ container:
 	--privileged                        \
 	--net host                          \
 	--publish 1194:1194/udp             \
+	--publish 443:443/tcp               \
 	--env DOMAIN="$(DOMAIN)"            \
 	--env SERVER="$(SERVER)"            \
 	--volume $(shell pwd)/var:/app/var  \
 	$(IMAGE)
-
-# Create a new interactive container from the image
-shell: 
-	mkdir -p ./var/;                    \
-	docker run                          \
-	--rm -it                            \
-	--net host                          \
-	--privileged                        \
-	--publish 1194:1194/udp             \
-	--env DOMAIN="$(DOMAIN)"            \
-	--env SERVER="$(SERVER)"            \
-	--volume $(shell pwd)/var:/app/var  \
-	$(IMAGE) /bin/bash

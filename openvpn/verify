@@ -2,7 +2,7 @@
 eval "$(cat /app/.local/share/shelper.sh)"
 
 domain=$NAME
-ocsp=$OCSP
+ocsp=http://$OCSP
 ca=/app/ca.crt
 cn=$X509_0_CN
 serial=$tls_serial_0
@@ -17,7 +17,7 @@ serial=$tls_serial_0
 defined $serial || exit 1 
 
 # Run OCSP command
-status=$(openssl ocsp -nonce -issuer $ca -CAfile $ca -url $OCSP -serial $serial 2>&1)
+status=$(openssl ocsp -nonce -issuer $ca -CAfile $ca -url $ocsp -serial $serial 2>&1)
 
 # Check for error code
 [[ "$?" = "0" ]] || exit 1

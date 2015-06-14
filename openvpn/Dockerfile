@@ -17,8 +17,9 @@ RUN                               \
 ADD ./tun.conf /app/tun.conf
 ADD ./tap.conf /app/tap.conf
 ADD ./verify /app/verify
-ADD ./bridge /app/bridge
-RUN chmod a+x /app/verify /app/bridge
+ADD ./tun /app/tun
+ADD ./tap /app/tap
+RUN chmod a+x /app/verify /app/tun /app/tap
 
 # Add start script
 ADD ./start /app/start
@@ -29,3 +30,4 @@ CMD ["/app/start"]
 
 # Expose port
 EXPOSE 1194/udp
+EXPOSE 443/tcp
