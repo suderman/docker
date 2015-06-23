@@ -8,6 +8,7 @@ export DOMAIN=$(ref DOMAIN localhost)
 export SERVER=$(ref SERVER 127.0.0.1)
 export CA=$(ref CA $SERVER:11443)
 export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
+export CLOUDFLARE=$(ref CLOUDFLARE '')
 export DNSIMPLE=$(ref DNSIMPLE '')
 
 # Wait for Padlock to be running
@@ -20,8 +21,8 @@ waitfor $CA
 # - /app/htpasswd/*.htpasswd
 # - /app/dnsmasq.conf
 # - /app/dnsmasq/*.dnsmasq.conf
-# - /app/dnsimple.sh
-# - /app/dnsimple/*.dnsimple.sh
+# - /app/dns.sh
+# - /app/dns/*.sh
 # - /app/certs/ca.crt
 # - /app/certs/ca.crl
 # - /app/certs/*.pem
@@ -31,7 +32,7 @@ for FILE in $(find /app/var -maxdepth 2 -name "*.proxify"); do
 done
 
 # Ensure directories exist
-directories="/app/nginx /app/dnsmasq /app/dnsimple /app/certs /app/log /app/error"
+directories="/app/nginx /app/dnsmasq /app/dns /app/certs /app/log /app/error"
 mkdir -p $directories
 
 # additional nginx, dnsmasq configuration

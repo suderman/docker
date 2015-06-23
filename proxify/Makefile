@@ -26,6 +26,7 @@ container: setup
 	--env DOMAIN="$(DOMAIN)"               \
 	--env SERVER="$(SERVER)"               \
 	--env PASSWORDS="$(PASSWORDS)"         \
+	--env CLOUDFLARE="$(CLOUDFLARE)"       \
 	--env DNSIMPLE="$(DNSIMPLE)"           \
 	--volume $(shell pwd)/var:/app/var     \
 	--volume $(DATA):/data                 \

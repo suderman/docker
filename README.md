@@ -84,8 +84,9 @@ export DATA="/data"
 # Comma-delimited authentication for services (username:password)
 export PASSWORDS="admin:super_secr3t,guest:passw0rd"
 
-# DNSimple API key (email:password)
+# CloudFlare and/or DNSimple API key (email:password)
 # router.domain.com should point to the router's public IP address
+export CLOUDFLARE="myname@email.com:my-secr3t-passw0rd"  
 export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"  
 ```
 
