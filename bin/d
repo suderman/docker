@@ -6,8 +6,15 @@
 # Helper methods for prettier shell scripting - http://suderman.github.io/shelper
 eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
 
+# Where docker directories are found
+docker=$(cd "$(dirname $(dirname "${BASH_SOURCE[0]}"))" && pwd)
+
+# Backup directory
+backup=$DATA/backup/docker
+mkdir -p $backup
+
 if [ $# -eq 0 ]; then
-  msg "Usage: d start stop exec logs ip clean clear refresh rebuild push pull info"
+  msg "Usage: d start stop exec logs ip clean clear refresh rebuild push pull tar info"
   exit 1
 fi
 
@@ -192,6 +199,19 @@ case $1 in
   # Pull the image from index.docker.io
   "pull" )
 	  docker pull $image
+    ;;
+
+  # Make backup
+  "tar" )
+    if has ${docker}/${container}/.tarignore; then
+      cmd="tar vpczf ${backup}/${container}.tar.gz -X ${docker}/${container}/.tarignore ${docker}/${container}" 
+    else
+      cmd="tar vpczf ${backup}/${container}.tar.gz ${docker}/${container} " 
+    fi
+    msg "Archive: $docker/$container"
+    msg "$cmd"
+    eval "sudo $cmd"
+    sudo chown data:data ${backup}/${container}.tar.gz
     ;;
     
   # Echo the image and container vars

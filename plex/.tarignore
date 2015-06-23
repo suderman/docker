@@ -1,0 +1,5 @@
+var/Library/Application Support/Plex Media Server/Logs
+var/Library/Application Support/Plex Media Server/Cache
+var/Library/Application Support/Plex Media Server/Media
+var/Library/Application Support/Plex Media Server/Metadata
+var/Library/Application Support/Plex Media Server/Plug-in Support/Caches

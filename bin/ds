@@ -16,7 +16,7 @@ db=""; for makefile in $(find $docker/*/Makefile); do
 done
 
 if [ $# -eq 0 ]; then
-  msg "Usage: ds start stop clean clear refresh rebuild ls info"
+  msg "Usage: ds start stop clean clear refresh rebuild ls tar info"
   exit 1
 fi
 
@@ -66,6 +66,12 @@ case $1 in
 
   "ls" )
     echo $(key :all $db)
+    ;;
+
+  "tar" )
+    for container in $(key :all $db); do
+      cd $(val $container $db) && d tar
+    done
     ;;
 
   "info" )
