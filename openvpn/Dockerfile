@@ -21,6 +21,10 @@ ADD ./tun /app/tun
 ADD ./tap /app/tap
 RUN chmod a+x /app/verify /app/tun /app/tap
 
+# Static IP addresses
+ADD ./dhcp /app/dhcp
+RUN mkdir /app/tun.ccd /app/tap.ccd
+
 # Add start script
 ADD ./start /app/start
 RUN chmod a+x /app/start

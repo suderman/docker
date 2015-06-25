@@ -6,15 +6,20 @@ export SERVER=$(ref SERVER 127.0.0.1)     # ip address of host server
 export CA=$(ref CA $SERVER:11443)         # padlock's ca server
 export OCSP=$(ref OCSP $SERVER:11188)     # padlock's ocsp server
 export NAME=$(ref NAME vpn.$DOMAIN)       # subdomain.domain name
+
+# Additional variables used in openvpn config
+export TAP=$(ref TAP "${SERVER%.*}")      # 10.0.0.2 becomes 10.0.0
+export TUN=$(ref TUN "${TAP%.*}.200")     # 10.0.0.2 becomes 10.0.200
 export BR=$(ref BR br0)                   # name of pre-existing bridge
 export FORWARD_443=$(ref FORWARD_443 444) # forward non-vpn traffic to nginx
 
-# Additional variables used in openvpn config
-three_octets=${SERVER%.*}  
-export TAP_POOL_START=$(ref TAP_POOL_START "${three_octets}.200") # 10.0.0.2 becomes 10.0.0.200
-export TAP_POOL_END=$(ref TAP_POOL_END "${three_octets}.254")     # 10.0.0.2 becomes 10.0.0.254
-export TUN_SUBNET=$(ref TUN_SUBNET "${three_octets%.*}.200.0")    # 10.0.0.2 becomes 10.0.200.0
-export TUN_3_OCTETS=$(ref TUN_3_OCTETS "${three_octets%.*}.200")  # 10.0.0.2 becomes 10.0.200
+# Create client config directories for static IP assignment
+rm -rf /app/tun.ccd/* /app/tap.ccd/*
+while read line; do
+  db=$(echo $line | sed 's/ \{1,\}/,/g')
+  echo "ifconfig-push ${TUN}.$(key :2 $db) 255.255.255.0" > /app/tun.ccd/$(key :1 $db)@${NAME}
+  echo "ifconfig-push ${TAP}.$(key :3 $db) 255.255.255.0" > /app/tap.ccd/$(key :1 $db)@${NAME}
+done < /app/dhcp
 
 # Activate forwarding
 append "net.ipv4.ip_forward=1" /etc/sysctl.conf

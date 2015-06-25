@@ -8,11 +8,11 @@ if [[ "$direction" = "up" ]]; then
   [ -c /dev/net/tun ] || mknod /dev/net/tun c 10 200
 
   # iptables rule to masquerade all the traffic coming from VPN clients
-  iptables -t nat -A POSTROUTING -s $TUN_SUBNET/24 -o $BR -j MASQUERADE
+  iptables -t nat -A POSTROUTING -s $TUN.0/24 -o $BR -j MASQUERADE
 
 elif [[ "$direction" = "down" ]]; then
 
   # undo routing
-  iptables -t nat -D POSTROUTING -s $TUN_SUBNET/24 -o $BR -j MASQUERADE
+  iptables -t nat -D POSTROUTING -s $TUN.0/24 -o $BR -j MASQUERADE
 
 fi
