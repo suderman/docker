@@ -9,7 +9,7 @@ export NAME=$(ref NAME vpn.$DOMAIN)       # subdomain.domain name
 
 # Additional variables used in openvpn config
 export TAP=$(ref TAP "${SERVER%.*}")      # 10.0.0.2 becomes 10.0.0
-export TUN=$(ref TUN "${TAP%.*}.200")     # 10.0.0.2 becomes 10.0.200
+export TUN=$(ref TUN "${TAP%.*}.10")      # 10.0.0.2 becomes 10.0.10
 export BR=$(ref BR br0)                   # name of pre-existing bridge
 export FORWARD_443=$(ref FORWARD_443 444) # forward non-vpn traffic to nginx
 
