@@ -42,6 +42,12 @@ msg "Start MariaDB, wait 5 seconds..."
 service mysql start
 sleep 5
 
+# Flush hosts to unblock connections
+msg "Flush hosts to unblock connections"
+mysql -u root <<-EOF
+    FLUSH HOSTS;
+EOF
+
 # Create the debian system maintence user (password is auto generated)
 msg "Create the debian system maintence user (password is auto generated)"
 MAINT_PASS=$(cat /etc/mysql/debian.cnf | grep -m 1 "password\s*=\s*"| sed 's/^password\s*=\s*//')

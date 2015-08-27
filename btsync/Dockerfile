@@ -6,7 +6,7 @@ MAINTAINER Jon Suderman <suderman@gmail.com>
 VOLUME ["/app/var", "/data"]
 
 # Install btsync
-RUN curl https://download-cdn.getsyncapp.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz -o /usr/bin/btsync.tar.gz
+RUN curl https://download-cdn.getsync.com/stable/linux-x64/BitTorrent-Sync_x64.tar.gz -o /usr/bin/btsync.tar.gz
 RUN cd /usr/bin && tar -xzvf btsync.tar.gz && rm btsync.tar.gz 
 
 # Add files 
