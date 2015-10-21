@@ -1,0 +1,3 @@
+owncloud.  80   8100
+owncloud.  81   https:  --redirect
+owncloud.  444  8100    --secure .
