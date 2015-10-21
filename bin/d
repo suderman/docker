@@ -39,7 +39,7 @@ if [ -z "$container" ]; then
   exit 1
 fi
 
-cid=$(docker ps | grep $container: | cut -d' ' -f1)
+cid=$(docker ps | grep $image | cut -d' ' -f1)
 
 dependencies=$(sed -n -e 's/DEPENDENCIES=//p' Makefile | tr -d " \t\n\r" | sed 's/,/ /g')
 
