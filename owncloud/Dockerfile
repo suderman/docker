@@ -23,10 +23,9 @@ RUN update-rc.d sendmail defaults
 # Install Owncloud
 RUN curl -k https://download.owncloud.org/community/owncloud-8.1.3.tar.bz2 | tar jx -C /app/
 ADD ./autoconfig.php /app/autoconfig.php
-RUN mv /app/owncloud/config /app/owncloud/config.dist
-RUN ln -sf /app/var /app/owncloud/config
-RUN chown -R data:data /app/owncloud
-RUN chown -R data:data /tmp
+RUN mv /app/owncloud/config /app/owncloud/config.dist                           && \
+    mv /app/owncloud/apps /app/owncloud/apps.dist                               && \
+    mv /app/owncloud/themes /app/owncloud/themes.dist
 
 # Set up cron
 RUN { crontab -l -u data; echo '*/15  *  *  *  * php -f /app/owncloud/cron.php > /dev/null 2>&1'; } | crontab -u data -

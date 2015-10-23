@@ -20,16 +20,27 @@ copy $CA/$NAME.key /app/certs/$NAME.key
 copy $CA/$NAME.crt /app/certs/$NAME.crt
 copy $CA/ca.crt /app/certs/ca.crt
 
+# Prepare OwnCloud var directory
+mkdir -p /app/var/config /app/var/apps /app/var/themes
+rm -f /app/owncloud/config && ln -sf /app/var/config /app/owncloud/config
+rm -f /app/owncloud/apps   && ln -sf /app/var/apps   /app/owncloud/apps
+rm -f /app/owncloud/themes && ln -sf /app/var/themes /app/owncloud/themes
+
+# Make sure no files are missing from the download 
+rsync -aq /app/owncloud/config.dist/* /app/var/config
+rsync -aq /app/owncloud/apps.dist/*   /app/var/apps
+rsync -aq /app/owncloud/themes.dist/* /app/var/themes
+
+# Copy and deref autoconfig
+cp -f /app/autoconfig.php /app/var/config/autoconfig.php
+deref /app/var/config/autoconfig.php
+
+# Fix permissions
+chown -R data:data /app/owncloud /app/var /tmp
+chmod -R 775 /app/var && chmod -R -x+X /app/var
+
 # Wait for MariaDB to be running
 waitfor $DB /app/certs/$NAME
-
-# Start redis
-service redis-server start
-
-# Prepare OwnCloud
-cp /app/autoconfig.php /app/var/autoconfig.php
-deref /app/var/autoconfig.php
-cp -f /app/owncloud/config.dist/* /app/var
 
 # Start the service
 service apache2 start
