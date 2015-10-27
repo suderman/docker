@@ -27,9 +27,11 @@ rm -f /app/owncloud/apps   && ln -sf /app/var/apps   /app/owncloud/apps
 rm -f /app/owncloud/themes && ln -sf /app/var/themes /app/owncloud/themes
 
 # Make sure no files are missing from the download 
-rsync -aq /app/owncloud/config.dist/* /app/var/config
-rsync -aq /app/owncloud/apps.dist/*   /app/var/apps
-rsync -aq /app/owncloud/themes.dist/* /app/var/themes
+for dir in config apps themes; do
+  for path in /app/owncloud/${dir}.dist/*; do 
+    cp -Rf $path /app/var/${dir}/$(basename $path)
+  done
+done
 
 # Copy and deref autoconfig
 cp -f /app/autoconfig.php /app/var/config/autoconfig.php
