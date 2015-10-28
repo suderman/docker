@@ -10,7 +10,7 @@ RUN apt-get update --fix-missing
 RUN apt-get install -y avahi-daemon avahi-utils unzip
 
 # Download deb and install
-RUN curl https://downloads.plex.tv/plex-media-server/0.9.12.13.1464-4ccd2ca/plexmediaserver_0.9.12.13.1464-4ccd2ca_amd64.deb -o /tmp/plex.deb
+RUN curl https://downloads.plex.tv/plex-media-server/0.9.12.17.1518-6b34983/plexmediaserver_0.9.12.17.1518-6b34983_amd64.deb -o /tmp/plex.deb
 RUN dpkg -i /tmp/plex.deb
 RUN apt-get -yf install
 
