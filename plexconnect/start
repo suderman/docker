@@ -14,7 +14,8 @@ touch /app/plexconnect/PlexConnect.log
 chown -R data:data /app/var /app/plexconnect
 
 # Check for updates
-cd /app/plexconnect && git pull
+# cd /app/plexconnect && git pull
+cd /app/plexconnect && git reset --hard 0b9d96fcc8
 
 # Start the service
 runas data "python /app/plexconnect/PlexConnect.py &"
