@@ -4,6 +4,7 @@ eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper
 # Set environment variables
 export CA=$(ref CA $SERVER:11443)
 export NAME=$(ref NAME mariadb.$DOMAIN)
+export PASSWORDS=$(echo $PASSWORDS | base64 -d)
 export USER=$(ref USER $(key :first $PASSWORDS))
 export PASS=$(ref PASS $(val :first $PASSWORDS))
 deref /app/my.cnf

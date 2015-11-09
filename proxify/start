@@ -7,6 +7,7 @@ export OUTPUT=/app
 export DOMAIN=$(ref DOMAIN localhost)
 export SERVER=$(ref SERVER 127.0.0.1)
 export CA=$(ref CA $SERVER:11443)
+export PASSWORDS=$(echo $PASSWORDS | base64 -d)
 export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
 export CLOUDFLARE=$(ref CLOUDFLARE '')
 export DNSIMPLE=$(ref DNSIMPLE '')
