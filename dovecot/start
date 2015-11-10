@@ -1,0 +1,67 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Set environment variables
+export SERVER=$(ref SERVER 127.0.0.1)
+export DB=$(ref DB $SERVER:3306)
+export CA=$(ref CA $SERVER:11443)
+export DOMAIN=$(ref DOMAIN 'localhost')
+export IMAP=$(ref IMAP imap.$DOMAIN)
+export SMTP=$(ref SMTP smtp.$DOMAIN)
+export PASSWORDS=$(echo $PASSWORDS | base64 -d)
+export USERS=$(ref USERS "$(keyval :all $PASSWORDS)")
+
+# Expand variables
+deref /app/dovecot/dovecot.conf 
+deref /app/postfix/main.cf
+
+# Wait for Padlock to be running
+waitfor $CA
+
+# Download CA and CRL
+copy $CA/ca.crt /app/certs/ca.crt.pem
+copy $CA/ca.crl.pem /app/certs/ca.crl.pem
+cat /app/certs/ca.crt.pem /app/certs/ca.crl.pem > /app/certs/ca.crt
+
+# Download certificates
+copy $CA/$IMAP.key /app/certs/$IMAP.key
+copy $CA/$IMAP.crt /app/certs/$IMAP.crt
+copy $CA/$SMTP.key /app/certs/$SMTP.key
+copy $CA/$SMTP.crt /app/certs/$SMTP.crt
+
+# Create IMAP accounts
+rm -rf /app/postfix/virtual 
+rm -rf /app/postfix/virtual-mailbox-maps
+rm -rf /app/dovecot/passwd
+
+# Use $PASSWORDS env variable to create accounts
+for USER in $USERS; do
+  NAME=$(key :first $USER)
+  echo -e "${NAME}@${DOMAIN}\t${NAME}@${DOMAIN}"          >> /app/postfix/virtual
+  echo -e "${NAME}@${DOMAIN}\t${DOMAIN}/${NAME}/"         >> /app/postfix/virtual-mailbox-maps
+  echo -e "${NAME}@${DOMAIN}:{PLAIN}$(val :first $USER)"  >> /app/dovecot/passwd
+done
+
+# Also add a catch-all account
+echo -e "@${DOMAIN}\tcatch-all@${DOMAIN}"                 >> /app/postfix/virtual
+echo -e "catch-all@${DOMAIN}\t${DOMAIN}/catch-all/"       >> /app/postfix/virtual-mailbox-maps
+echo -e "catch-all@${DOMAIN}:{PLAIN}$(val :first $USERS)" >> /app/dovecot/passwd
+
+# Set domain where mail is sent from and sent to
+echo "$DOMAIN" > /app/postfix/virtual-mailbox-domains
+echo "$DOMAIN" > /etc/mailname
+
+# Map virtual aliases and user/filesystem mappings
+postmap /app/postfix/virtual
+postmap /app/postfix/virtual-mailbox-maps
+
+# Fix permissions
+mkdir -p /app/var/mail
+chown -R data:data /app/var
+chmod -R 775 /app/var && chmod -R -x+X /app/var
+
+# Start the services
+service rsyslog start
+service postgrey start
+postfix -c /app/postfix start
+dovecot -F -c /app/dovecot/dovecot.conf

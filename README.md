@@ -81,7 +81,7 @@ export SERVER="10.0.0.2"
 # Data directory on Server
 export DATA="/data"
 
-# Comma-delimited authentication for services (username:password)
+# Comma-delimited authentication for services (username:password) base64-encoded 
 export PASSWORDS="admin:super_secr3t,guest:passw0rd"
 
 # CloudFlare and/or DNSimple API key (email:password)
@@ -99,13 +99,15 @@ export DNSIMPLE="myname@email.com:my-secr3t-passw0rd"
   - [dnsmasq](http://www.thekelleys.org.uk/dnsmasq/doc.html)
 - [mariadb](https://mariadb.org/)
 - [homemaker](https://github.com/suderman/homemaker)
-- [kandan](http://http://getkandan.com/)
+- [owncloud](https://owncloud.org/)
+- [dovecot](http://www.dovecot.org/)
 - [plex](https://plex.tv/)
 - [plexconnect](https://github.com/iBaa/PlexConnect)
 - [btsync](https://www.getsync.com/)
 - [sabnzbd](http://sabnzbd.org/)
 - [couchpotato](https://couchpota.to/)
 - [samba](https://www.samba.org/)
+- [kandan](http://http://getkandan.com/)
 
 #### Others still to set up:
 - [headphones](https://github.com/rembo10/headphones)
