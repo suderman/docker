@@ -43,10 +43,11 @@ msg "Start MariaDB, wait 5 seconds..."
 service mysql start
 sleep 5
 
-# Flush hosts to unblock connections
+# Flush hosts to unblock connections, allow more attempts
 msg "Flush hosts to unblock connections"
 mysql -u root <<-EOF
     FLUSH HOSTS;
+    SET GLOBAL max_connect_errors=250000;
 EOF
 
 # Create the debian system maintence user (password is auto generated)

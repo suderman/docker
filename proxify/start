@@ -50,5 +50,14 @@ chgrp -R $USER $directories
 # Run dnsimple scripts, start nginx & dnsmasq
 /app/start.sh
 
+# Update the CRL and reload nginx every hour
+msg "Update the CRL and reload nginx every hour"
+while true; do 
+  sleep 1h && waitfor $CA
+  copy $CA/ca.crl.pem /app/certs/ca.crl
+  service nginx reload
+  echo "$(date) - updated CRL and reloaded nginx"
+done >> /app/nginx.reload.log &
+
 # Watch the log and keep the container alive
 tail -F /app/log/*.log
