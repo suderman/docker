@@ -70,8 +70,8 @@ mysql -u root <<-EOF
     GRANT ALL PRIVILEGES ON *.* TO 'debian-sys-maint'@'localhost' IDENTIFIED BY '$MAINT_PASS';
 EOF
 
-# Create the password user (from $USER:$PASS)
-msg "Create the password user (from $USER:$PASS)"
+# Create the password user (from $USER)
+msg "Create the password user (from $USER)"
 mysql -u root <<-EOF
     DELETE FROM mysql.user WHERE user = '$USER';
     GRANT ALL PRIVILEGES ON *.* TO '$USER'@'localhost' IDENTIFIED BY '$PASS';
