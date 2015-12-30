@@ -1,0 +1,3 @@
+apps.  80   /data/library/apps
+apps.  81   https:              --redirect
+apps.  444  /data/library/apps  --secure --authenticate

@@ -57,7 +57,7 @@ while true; do
   copy $CA/ca.crl.pem /app/certs/ca.crl
   service nginx reload
   echo "$(date) - updated CRL and reloaded nginx"
-done >> /app/nginx.reload.log &
+done >> /app/log/nginx.reload.log &
 
 # Watch the log and keep the container alive
 tail -F /app/log/*.log
