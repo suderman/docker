@@ -21,7 +21,7 @@ RUN apt-get update --fix-missing && apt-get install -y                          
 RUN update-rc.d sendmail defaults
 
 # Install Owncloud
-RUN curl -k https://download.owncloud.org/community/owncloud-8.2.0.tar.bz2 | tar jx -C /app/
+RUN curl -k https://download.owncloud.org/community/owncloud-8.2.2.tar.bz2 | tar jx -C /app/
 ADD ./autoconfig.php /app/autoconfig.php
 RUN mv /app/owncloud/config /app/owncloud/config.dist                           && \
     mv /app/owncloud/apps /app/owncloud/apps.dist                               && \
