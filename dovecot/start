@@ -56,12 +56,26 @@ postmap /app/postfix/virtual
 postmap /app/postfix/virtual-mailbox-maps
 
 # Fix permissions
-mkdir -p /app/var/mail
+mkdir -p /app/var/mail /app/log
 chown -R data:data /app/var
 chmod -R 775 /app/var && chmod -R -x+X /app/var
+
+# Update the CRL and reload dovecot every hour
+touch /app/log/dovecot.reload.log
+msg "Update the CRL and reload dovecot every hour"
+while true; do 
+  sleep 1h && waitfor $CA
+  copy $CA/ca.crl.pem /app/certs/ca.crl.pem
+  cat /app/certs/ca.crt.pem /app/certs/ca.crl.pem > /app/certs/ca.crt
+  dovecot reload
+  echo "$(date) - updated CRL and reloaded dovecot"
+done >> /app/log/dovecot.reload.log &
 
 # Start the services
 service rsyslog start
 service postgrey start
 postfix -c /app/postfix start
-dovecot -F -c /app/dovecot/dovecot.conf
+dovecot -c /app/dovecot/dovecot.conf
+
+# Tail the logs and keep the container alive
+tail -F /app/log/*.log
