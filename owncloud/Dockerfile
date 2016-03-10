@@ -21,11 +21,12 @@ RUN apt-get update --fix-missing && apt-get install -y                          
 RUN update-rc.d sendmail defaults
 
 # Install Owncloud
-RUN curl -k https://download.owncloud.org/community/owncloud-8.2.2.tar.bz2 | tar jx -C /app/
+RUN curl -k https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2 | tar jx -C /app/
 ADD ./autoconfig.php /app/autoconfig.php
-RUN mv /app/owncloud/config /app/owncloud/config.dist                           && \
-    mv /app/owncloud/apps /app/owncloud/apps.dist                               && \
-    mv /app/owncloud/themes /app/owncloud/themes.dist
+RUN mkdir -p /app/owncloud.dist                                                 && \
+    mv /app/owncloud/config /app/owncloud.dist/config                           && \
+    mv /app/owncloud/apps /app/owncloud.dist/apps                               && \
+    mv /app/owncloud/themes /app/owncloud.dist/themes
 
 # Set up cron
 RUN { crontab -l -u data; echo '*/15  *  *  *  * php -f /app/owncloud/cron.php > /dev/null 2>&1'; } | crontab -u data -

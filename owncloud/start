@@ -29,7 +29,7 @@ rm -f /app/owncloud/themes && ln -sf /app/var/themes /app/owncloud/themes
 
 # Make sure no files are missing from the download 
 for dir in config apps themes; do
-  for path in /app/owncloud/${dir}.dist/*; do 
+  for path in /app/owncloud.dist/${dir}/*; do 
     rm -rf /app/var/${dir}/$(basename $path)
     cp -r $path /app/var/${dir}/$(basename $path)
   done
