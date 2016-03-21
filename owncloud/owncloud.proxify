@@ -1,3 +1,4 @@
 owncloud.  80   8100
 owncloud.  81   https:  --redirect
-owncloud.  444  8100    --secure . --nginx 'rewrite ^/.well-known/carddav /remote.php/carddav/ redirect; rewrite ^/.well-known/caldav /remote.php/caldav/ redirect;'
+owncloud.  444  8100    --secure --nginx 'rewrite ^/.well-known/carddav /remote.php/carddav/ redirect; rewrite ^/.well-known/caldav /remote.php/caldav/ redirect; add_header Strict-Transport-Security "max-age=15768000; includeSubdomains;";'
+auth.owncloud. 444  8100    --secure owncloud. --authenticate --nginx 'rewrite ^/.well-known/carddav /remote.php/carddav/ redirect; rewrite ^/.well-known/caldav /remote.php/caldav/ redirect; add_header Strict-Transport-Security "max-age=15768000; includeSubdomains;";'

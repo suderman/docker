@@ -3,7 +3,7 @@ FROM suderman/trusty
 MAINTAINER Jon Suderman <suderman@gmail.com>
 
 # Define mountable directories
-VOLUME ["/app/var", "/data"]
+VOLUME ["/app/var","/data","/downloads","/library","/media"]
 
 # Install dependencies
 RUN apt-get update --fix-missing && apt-get install -y                             \
@@ -17,11 +17,16 @@ RUN apt-get update --fix-missing && apt-get install -y                          
     php-pear php-xml-parser php5 php5-cli php5-common php5-curl php5-gd            \
     php5-imagick php5-intl php5-json php5-mcrypt php5-mysqlnd php5-pgsql           \
     php5-readline php5-sqlite php5-dev poppler-data psmisc ttf-dejavu-core         \
-    libc6 libcurl3 zlib1g libpcre3-dev
+    libc6 libcurl3 zlib1g libpcre3-dev libreoffice-common libreoffice-writer
 RUN update-rc.d sendmail defaults
 
 # Install Owncloud
-RUN curl -k https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2 | tar jx -C /app/
+# RUN curl -k https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2 | tar jx -C /app/
+RUN git clone https://github.com/owncloud/core.git && mv core /app/owncloud
+RUN cd /app/owncloud && git checkout stable9
+RUN git clone https://github.com/owncloud/3rdparty.git /app/owncloud/3rdparty
+RUN cd /app/owncloud/3rdparty && git checkout stable9
+
 ADD ./autoconfig.php /app/autoconfig.php
 RUN mkdir -p /app/owncloud.dist                                                 && \
     mv /app/owncloud/config /app/owncloud.dist/config                           && \

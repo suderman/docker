@@ -13,15 +13,18 @@ image:
 
 # Create a new detached container from the image
 container:
-	mkdir -p ./var/;                    \
-	docker run                          \
-	--detach                            \
-	--name $(CONTAINER)                 \
-	--hostname $(CONTAINER)             \
-	--publish 8100:80                   \
-	--env DOMAIN="$(DOMAIN)"            \
-	--env SERVER="$(SERVER)"            \
-	--env PASSWORDS="$(PASSWORDS)"      \
-	--volume $(shell pwd)/var:/app/var  \
-	--volume $(DATA)/owncloud:/data     \
+	mkdir -p ./var/;                          \
+	docker run                                \
+	--detach                                  \
+	--name $(CONTAINER)                       \
+	--hostname $(CONTAINER)                   \
+	--publish 8100:80                         \
+	--env DOMAIN="$(DOMAIN)"                  \
+	--env SERVER="$(SERVER)"                  \
+	--env PASSWORDS="$(PASSWORDS)"            \
+	--volume $(shell pwd)/var:/app/var        \
+	--volume $(DATA)/owncloud:/data           \
+	--volume $(DATA)/downloads:/downloads     \
+	--volume $(DATA)/library:/library         \
+	--volume $(DATA)/media:/media             \
 	$(IMAGE)
