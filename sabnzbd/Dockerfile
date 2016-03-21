@@ -6,7 +6,8 @@ MAINTAINER Jon Suderman <suderman@gmail.com>
 VOLUME ["/app/var", "/downloads" "/library"]
 
 RUN                                                                      \
-  apt-get update                                                      && \
+  add-apt-repository -y ppa:jcfp/ppa                                  && \
+  apt-get update --fix-missing                                        && \
   apt-get install -y                                                     \
           sabnzbdplus                                                    \
           sabnzbdplus-theme-classic                                      \
