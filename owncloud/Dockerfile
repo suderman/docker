@@ -3,7 +3,7 @@ FROM suderman/trusty
 MAINTAINER Jon Suderman <suderman@gmail.com>
 
 # Define mountable directories
-VOLUME ["/app/var","/data","/downloads","/library","/media"]
+VOLUME ["/app/var", "/data"]
 
 # Install dependencies
 RUN apt-get update --fix-missing && apt-get install -y                             \
@@ -21,7 +21,6 @@ RUN apt-get update --fix-missing && apt-get install -y                          
 RUN update-rc.d sendmail defaults
 
 # Install Owncloud
-# RUN curl -k https://download.owncloud.org/community/owncloud-9.0.0.tar.bz2 | tar jx -C /app/
 RUN git clone https://github.com/owncloud/core.git && mv core /app/owncloud
 RUN cd /app/owncloud && git checkout stable9
 RUN git clone https://github.com/owncloud/3rdparty.git /app/owncloud/3rdparty
@@ -33,8 +32,8 @@ RUN mkdir -p /app/owncloud.dist                                                 
     mv /app/owncloud/apps /app/owncloud.dist/apps                               && \
     mv /app/owncloud/themes /app/owncloud.dist/themes
 
-# Set up cron
-RUN { crontab -l -u data; echo '*/15  *  *  *  * php -f /app/owncloud/cron.php > /dev/null 2>&1'; } | crontab -u data -
+# Set up cron every 15 minutes, run by data
+RUN (crontab -lu data; echo '*/15  *  *  *  * php -f /app/owncloud/cron.php >> /dev/null 2>&1';) | crontab -u data -
 
 # Set up APCu
 RUN pecl channel-update pecl.php.net

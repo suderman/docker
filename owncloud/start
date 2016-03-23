@@ -49,5 +49,8 @@ waitfor $DB /app/certs/$NAME
 # Start the service
 service apache2 start
 
+# Start up cron
+cron
+
 # Tail the logs and keep the container alive
-tail -F /var/log/apache2/error.log /data/owncloud.log
+tail -F /var/log/apache2/error.log /data/owncloud/owncloud.log

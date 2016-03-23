@@ -23,8 +23,5 @@ container:
 	--env SERVER="$(SERVER)"                  \
 	--env PASSWORDS="$(PASSWORDS)"            \
 	--volume $(shell pwd)/var:/app/var        \
-	--volume $(DATA)/owncloud:/data           \
-	--volume $(DATA)/downloads:/downloads     \
-	--volume $(DATA)/library:/library         \
-	--volume $(DATA)/media:/media             \
+	--volume $(DATA):/data                    \
 	$(IMAGE)

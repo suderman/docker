@@ -1,7 +1,7 @@
 <?php
 $AUTOCONFIG = array(
   'trusted_domains' => array ( 0 => '$SUBDOMAIN' ),
-  "directory"     => "/data",
+  "directory"     => "/data/owncloud",
   "dbtype"        => "mysql",
   "dbname"        => "$DATABASE",
   "dbuser"        => "root",
@@ -16,4 +16,11 @@ $AUTOCONFIG = array(
   "adminlogin"    => "$USER",
   "adminpass"     => "$PASS",
   'memcache.local' => '\OC\Memcache\APCu',
+  'preview_libreoffice_path' => '/usr/bin/libreoffice',
+  'theme' => '',
+  'loglevel' => 3,
+  'maintenance' => false,
+  'log_type' => 'owncloud',
+  'logtimezone' => 'UTC',
+  'log_rotate_size' => 104857600,
 );
