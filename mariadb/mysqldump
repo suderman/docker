@@ -1,4 +1,7 @@
 #!/bin/bash
 
 # Backup all data
-/usr/bin/mysqldump -A > /app/var/dump.sql
+mysqldump --single-transaction --routines --triggers --all-databases > /app/var/dump.sql
+
+# Update log
+echo "$(date) - exported all data to /app/var/dump.sql" >> /app/log/mariadb.dump.log

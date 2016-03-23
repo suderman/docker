@@ -9,12 +9,12 @@ export USER=$(ref USER $(key :first $PASSWORDS))
 export PASS=$(ref PASS $(val :first $PASSWORDS))
 deref /app/my.cnf
 
+# Copy config where it is expected
+ln -f /app/my.cnf /etc/mysql/my.cnf
+
 # Ensure directories exist
 mkdir -p /app/log
-
-# Link files to where they're expected
-ln -f /app/my.cnf /etc/mysql/my.cnf
-ln -f /app/mysqldump /etc/cron.daily/mysqldump
+touch /app/log/mariadb.log
 
 # Wait for Padlock to be running
 waitfor $CA
@@ -46,15 +46,6 @@ rm -f /run/mysqld/mysqld.sock
 msg "Start MariaDB, wait 5 seconds..."
 service mysql start
 sleep 5
-
-# Update the CRL and reload mariadb every hour
-msg "Update the CRL and reload mariadb every hour"
-while true; do 
-  sleep 1h && waitfor $CA
-  copy $CA/ca.crl.pem /app/certs/ca.crl
-  service mysql reload
-  echo "$(date) - updated CRL and reloaded mariadb"
-done >> /app/log/mariadb.reload.log &
 
 # Flush hosts to unblock connections, allow more attempts
 msg "Flush hosts to unblock connections"
@@ -90,6 +81,9 @@ mysql -u root <<-EOF
     AND ISSUER '$ISSUER';
     FLUSH PRIVILEGES;
 EOF
+
+# Start up cron
+cron
 
 # Tail the logs and keep the container alive
 tail -F /app/log/*.log

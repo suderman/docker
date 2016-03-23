@@ -1,0 +1,13 @@
+#!/bin/bash
+eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+
+# Wait for CA to be available
+CA=$(ref CA)
+waitfor $CA
+
+# Download CRL from CA and restart server
+copy $CA/ca.crl.pem /app/certs/ca.crl
+service mysql restart
+
+# Update log
+echo "$(date) - updated CRL and reloaded mariadb" >> /app/log/mariadb.reload.log
