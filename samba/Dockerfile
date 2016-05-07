@@ -25,6 +25,7 @@ ADD	./samba.service /app/samba.service
 ADD	./avahi-daemon.conf /app/avahi-daemon.conf
 
 # Add files
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

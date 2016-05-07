@@ -1,15 +1,5 @@
 #!/bin/bash
-eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
-
-# Set environment variables
-export SERVER=$(ref SERVER 127.0.0.1)
-export DB=$(ref DB $SERVER:3306)
-export CA=$(ref CA $SERVER:11443)
-export DOMAIN=$(ref DOMAIN 'localhost')
-export IMAP=$(ref IMAP imap.$DOMAIN)
-export SMTP=$(ref SMTP smtp.$DOMAIN)
-export PASSWORDS=$(echo $PASSWORDS | base64 -d)
-export USERS=$(ref USERS "$(keyval :all $PASSWORDS)")
+source ~/.bashrc
 
 # Expand variables
 deref /app/dovecot/dovecot.conf 

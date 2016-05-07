@@ -1,5 +1,5 @@
 #!/bin/bash
-eval "$(cat /app/.local/share/shelper.sh)"
+source ~/.bashrc
 
 domain=$NAME
 ocsp=http://$OCSP

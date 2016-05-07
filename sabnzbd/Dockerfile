@@ -19,6 +19,7 @@ RUN                                                                      \
           unzip                                                          
 
 # Add files 
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

@@ -1,0 +1,220 @@
+version: '2'
+services: 
+
+  # Samba Server
+  samba:
+    build: ./samba
+    image: suderman/samba
+    restart: always
+    network_mode: host
+    volumes:
+      - ${DATA}:/data
+
+
+  # BitTorrent Sync
+  btsync:
+    build: ./btsync
+    image: suderman/btsync
+    hostname: btsync
+    restart: always
+    volumes:
+      - ./btsync/var:/app/var
+      - ${DATA}:/data
+    ports:
+      - 8888:8888
+      - 55555:55555
+
+
+  # Certificate Authority
+  padlock:
+    build: ./padlock
+    image: suderman/padlock
+    restart: always
+    environment:
+      - DOMAIN
+    volumes:
+      - ./padlock/var:/app/var
+    ports:
+      - 11443:11443
+      - 11180:11180
+      - 11188:11188
+
+
+  # OpenVPN Server
+  openvpn:
+    build: ./openvpn
+    image: suderman/openvpn
+    depends_on:
+      - padlock
+    restart: always
+    privileged: true
+    environment:
+      - DOMAIN
+      - SERVER
+    ports:
+      - 1194:1194/udp
+      - 443:443/tcp
+    network_mode: host
+
+
+  # MariaDB MySQL Database
+  mariadb:
+    build: ./mariadb
+    image: suderman/mariadb
+    depends_on:
+      - padlock
+    environment:
+      - DOMAIN
+      - SERVER
+      - PASSWORDS
+    volumes:
+      - ./mariadb/var:/app/var
+    ports:
+      - 3306:3306
+
+
+  # Dovecot IMAP Server
+  dovecot:
+    build: ./dovecot
+    image: suderman/dovecot
+    depends_on:
+      - padlock
+    environment:
+      - DOMAIN
+      - SERVER
+      - PASSWORDS
+    volumes:
+      - ./dovecot/var:/app/var
+    ports:
+      - 26:26
+      - 587:587
+      - 143:143
+
+
+  # Homemaker API
+  homemaker:
+    build: ./homemaker
+    image: suderman/homemaker
+    hostname: homemaker
+    depends_on:
+      - padlock
+      - mariadb
+    environment:
+      - DOMAIN
+      - SERVER
+    ports:
+      - 7000:7000
+      - 7001:7001
+
+
+  # ownCloud
+  owncloud:
+    build: ./owncloud
+    image: suderman/owncloud
+    hostname: owncloud
+    depends_on:
+      - padlock
+      - mariadb
+    environment:
+      - DOMAIN
+      - SERVER
+      - PASSWORDS
+    volumes:
+      - ./owncloud/var:/app/var
+      - ${DATA}:/data
+    ports:
+      - 8100:80
+
+
+  # CouchPotato
+  btsync:
+    build: ./couchpotato
+    image: suderman/couchpotato
+    hostname: couchpotato
+    restart: always
+    volumes:
+      - ./couchpotato/var:/app/var
+      - ${DATA}/downloads/usenet:/downloads
+      - ${DATA}/library/movies:/movies
+    ports:
+      - 5050:5050
+
+
+  # SabNZBd
+  sabnzbd:
+    build: .sabnzbd
+    image: suderman/sabnzbd
+    hostname: sabnzbd
+    restart: always
+    volumes:
+      - ./sabnzbd/var:/app/var
+      - ${DATA}/downloads/usenet:/downloads
+      - ${DATA}/library:/library
+    ports:
+      - 8080:8080
+      - 9090:9090
+
+
+  # Plex Media Server
+  plex:
+    build: ./plex
+    image: suderman/plex
+    restart: always
+    volumes:
+      - ./plex/var:/app/var
+      - ${DATA}/library:/library
+      - ${DATA}/media:/media
+    network_mode: "host"
+
+
+  # PlexConnect
+  plexconnect:
+    build: ./plexconnect
+    image: suderman/plexconnect
+    hostname: plexconnect
+    depends_on:
+      - plex
+    restart: always
+    volumes:
+      - ./plexconnect/var:/app/var
+    ports:
+      - 32480:32480
+
+
+  # Reverse Proxy & DNS Server
+  proxify:
+    build: ./proxify
+    image: suderman/proxify
+    restart: always
+    depends_on:
+      - padlock
+      - openvpn
+    environment:
+      - DOMAIN
+      - SERVER
+      - PASSWORDS
+      - CLOUDFLARE
+      - DNSIMPLE
+    volumes:
+      - ./btsync/proxify:/app/var/btsync
+      - ./couchpotato/proxify:/app/var/couchpotato
+      - ./dovecot/proxify:/app/var/dovecot
+      - ./homemaker/proxify:/app/var/homemaker
+      - ./mariadb/proxify:/app/var/mariadb
+      - ./openvpn/proxify:/app/var/openvpn
+      - ./owncloud/proxify:/app/var/owncloud
+      - ./padlock/proxify:/app/var/padlock
+      - ./plex/proxify:/app/var/plex
+      - ./plexconnect/proxify:/app/var/plexconnect
+      - ./sabnzbd/proxify:/app/var/sabnzbd
+      - ./proxify/proxify:/app/var/proxify
+      - ./proxies:/app/var/proxies
+      - ${DATA}:/data
+    ports:
+      - 80:80
+      - 444:444
+      - 4430:4430
+      - 53:53
+      - 53:53/udp
+    # network_mode: "host"
+

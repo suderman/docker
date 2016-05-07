@@ -25,6 +25,7 @@ RUN git clone https://github.com/suderman/homemaker.git /app/homemaker && \
 
 # Add files
 ADD ./env /app/homemaker/.env
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

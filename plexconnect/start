@@ -1,8 +1,7 @@
 #!/bin/bash
-eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+source ~/.bashrc
 
-# Set environment variables
-export SERVER=$(ref SERVER 127.0.0.1)
+# Set config
 deref /app/plexconnect/Settings.cfg
 
 # Keep ATVSettings saved in /app/var

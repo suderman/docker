@@ -1,4 +1,5 @@
 #!/bin/bash
+source ~/.bashrc
 
 # Backup all data
 mysqldump --single-transaction --routines --triggers --all-databases > /app/var/dump.sql

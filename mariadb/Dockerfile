@@ -26,6 +26,7 @@ RUN chmod a+x /app/mysqlcrl
 RUN (crontab -l; echo '30  3  *  *  * /app/mysqlcrl >> /dev/null 2>&1';) | crontab -
 
 # Add files 
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

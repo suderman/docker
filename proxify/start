@@ -1,16 +1,5 @@
 #!/bin/bash
-eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
-
-# Set environment variables
-export USER=data
-export OUTPUT=/app
-export DOMAIN=$(ref DOMAIN localhost)
-export SERVER=$(ref SERVER 127.0.0.1)
-export CA=$(ref CA $SERVER:11443)
-export PASSWORDS=$(echo $PASSWORDS | base64 -d)
-export PASSWORDS=$(ref PASSWORDS "$USER:$USER")
-export CLOUDFLARE=$(ref CLOUDFLARE '')
-export DNSIMPLE=$(ref DNSIMPLE '')
+source ~/.bashrc
 
 # Wait for Padlock to be running
 waitfor $CA
@@ -38,9 +27,11 @@ mkdir -p $directories
 
 # additional nginx, dnsmasq configuration
 for CONF in nginx dnsmasq; do
-  rm -rf /app/${CONF}/000.${CONF}.conf
-  cat /app/var/${CONF}/*.${CONF}.conf >> /app/${CONF}/000.${CONF}.conf
-  deref /app/${CONF}/000.${CONF}.conf
+  for FILE in $(find /app/var -maxdepth 2 -name "*.${CONF}.conf"); do
+    rm -rf /app/${CONF}/000.${CONF}.conf
+    cat $FILE >> /app/${CONF}/000.${CONF}.conf
+    deref /app/${CONF}/000.${CONF}.conf
+  done
 done
 
 # Ensure proper permissions
@@ -48,6 +39,7 @@ chown -R $USER $directories
 chgrp -R $USER $directories
 
 # Run dnsimple scripts, start nginx & dnsmasq
+mv /app/dns.sh /app/dns.disabled.sh # remove this
 /app/start.sh
 
 # Update the CRL and reload nginx every hour

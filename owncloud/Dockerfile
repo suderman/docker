@@ -22,9 +22,9 @@ RUN update-rc.d sendmail defaults
 
 # Install Owncloud
 RUN git clone https://github.com/owncloud/core.git && mv core /app/owncloud
-RUN cd /app/owncloud && git checkout stable9
+RUN cd /app/owncloud && git checkout tags/v9.0.1
 RUN git clone https://github.com/owncloud/3rdparty.git /app/owncloud/3rdparty
-RUN cd /app/owncloud/3rdparty && git checkout stable9
+RUN cd /app/owncloud/3rdparty && git checkout tags/v9.0.1
 
 ADD ./autoconfig.php /app/autoconfig.php
 RUN mkdir -p /app/owncloud.dist                                                 && \
@@ -60,6 +60,7 @@ RUN a2enmod rewrite
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 
 # Add files 
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

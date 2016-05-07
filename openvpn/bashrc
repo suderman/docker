@@ -1,0 +1,14 @@
+# Helper functions
+eval "$(cat ~/.local/share/shelper.sh 2>/dev/null || curl -s suderman.github.io/shelper/shelper.sh)"
+
+# Set environment variables
+export SERVER=$(ref SERVER 127.0.0.1)     # ip address of host server
+export CA=$(ref CA $SERVER:11443)         # padlock's ca server
+export OCSP=$(ref OCSP $SERVER:11188)     # padlock's ocsp server
+export NAME=$(ref NAME vpn.$DOMAIN)       # subdomain.domain name
+
+# Additional variables used in openvpn config
+export TAP=$(ref TAP "${SERVER%.*}")      # 10.0.0.2 becomes 10.0.0
+export TUN=$(ref TUN "${TAP%.*}.10")      # 10.0.0.2 becomes 10.0.10
+export BR=$(ref BR br0)                   # name of pre-existing bridge
+export FORWARD_443=$(ref FORWARD_443 444) # forward non-vpn traffic to nginx

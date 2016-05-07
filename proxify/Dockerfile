@@ -42,6 +42,7 @@ RUN                                                                       \
   cp -r /tmp/errorpages/http-errors /app/error
 
 # Add files 
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

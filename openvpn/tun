@@ -1,4 +1,6 @@
 #!/bin/bash
+source ~/.bashrc
+
 direction=$1
 
 if [[ "$direction" = "up" ]]; then

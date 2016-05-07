@@ -25,6 +25,7 @@ RUN git clone https://github.com/suderman/padlock.git /app/padlock && \
 RUN ln -sf /app/var /app/padlock/ca 
 
 # Add files
+ADD ./bashrc /app/.bashrc 
 ADD ./env /app/padlock/.env
 ADD ./start /app/start
 RUN chmod a+x /app/start

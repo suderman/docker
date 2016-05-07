@@ -17,6 +17,7 @@ RUN git clone https://github.com/iBaa/PlexConnect.git /app/plexconnect
 ADD ./Settings.cfg /app/plexconnect/Settings.cfg
 
 # Add files
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

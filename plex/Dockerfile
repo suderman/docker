@@ -10,11 +10,12 @@ RUN apt-get update --fix-missing
 RUN apt-get install -y avahi-daemon avahi-utils unzip
 
 # Download deb and install
-RUN curl https://downloads.plex.tv/plex-media-server/0.9.16.2.1827-df572f6/plexmediaserver_0.9.16.2.1827-df572f6_amd64.deb -o /tmp/plex.deb
+RUN curl https://downloads.plex.tv/plex-media-server/0.9.16.6.1993-5089475/plexmediaserver_0.9.16.6.1993-5089475_amd64.deb -o /tmp/plex.deb
 RUN dpkg -i /tmp/plex.deb
 RUN apt-get -yf install
 
 # Add files 
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

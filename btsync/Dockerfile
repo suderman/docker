@@ -11,6 +11,7 @@ RUN cd /usr/bin && tar -xzvf btsync.tar.gz && rm btsync.tar.gz
 
 # Add files 
 ADD	./btsync.conf /app/btsync.conf
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

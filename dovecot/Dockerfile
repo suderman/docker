@@ -22,6 +22,7 @@ RUN cp -r /etc/dovecot /app/dovecot
 ADD ./dovecot.conf /app/dovecot/dovecot.conf
 
 # Add files
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

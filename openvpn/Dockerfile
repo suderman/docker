@@ -26,6 +26,7 @@ ADD ./dhcp /app/dhcp
 RUN mkdir /app/tun.ccd /app/tap.ccd
 
 # Add start script
+ADD ./bashrc /app/.bashrc 
 ADD ./start /app/start
 RUN chmod a+x /app/start
 

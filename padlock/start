@@ -1,8 +1,7 @@
 #!/bin/bash
-eval "$(cat ~/.local/share/shelper.sh || curl suderman.github.io/shelper/shelper.sh)"
+source ~/.bashrc
 
-# Set environment variables
-export DOMAIN=$(ref DOMAIN 'localhost')
+# Set configuration
 deref /app/padlock/.env
 
 # Start the node server
